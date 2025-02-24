@@ -1,0 +1,66 @@
+<script type="text/javascript">
+
+    var primen1 = document.getElementsByClassName('1primenDesktop');
+    if(primen1[0]){
+    } else {
+        var remove_div1 = document.getElementsByClassName('1primeNotes');
+        if(remove_div1[0]){
+            remove_div1[0].parentNode.removeChild(remove_div1[0]);
+        }
+    }
+    var primen2 = document.getElementsByClassName('2primenDesktop');
+    if(primen2[0]){
+    } else {
+        var remove_div2 = document.getElementsByClassName('2primeNotes');
+        if(remove_div2[0]){
+            remove_div2[0].parentNode.removeChild(remove_div2[0]);
+        }
+    }
+    var primen3 = document.getElementsByClassName('3primenDesktop');
+    if(primen3[0]){
+    } else {
+        var remove_div3 = document.getElementsByClassName('3primeNotes');
+        if(remove_div3[0]){
+            remove_div3[0].parentNode.removeChild(remove_div3[0]);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+        setTimeout(function(){ 
+            primenonload();
+        }, 500);
+
+    })
+
+    
+    function primenonload() {
+
+        var primen1 = document.getElementsByClassName('1primenDesktop');
+        if(primen1[0]){
+        } else {
+            var remove_div1 = document.getElementsByClassName('1primeNotes');
+            if(remove_div1[0]){
+                remove_div1[0].parentNode.removeChild(remove_div1[0]);
+            }
+        }
+        var primen2 = document.getElementsByClassName('2primenDesktop');
+        if(primen2[0]){
+        } else {
+            var remove_div2 = document.getElementsByClassName('2primeNotes');
+            if(remove_div2[0]){
+                remove_div2[0].parentNode.removeChild(remove_div2[0]);
+            }
+        }
+        var primen3 = document.getElementsByClassName('3primenDesktop');
+        if(primen3[0]){
+        } else {
+            var remove_div3 = document.getElementsByClassName('3primeNotes');
+            if(remove_div3[0]){
+                remove_div3[0].parentNode.removeChild(remove_div3[0]);
+            }
+        }
+        
+
+    }
+</script>

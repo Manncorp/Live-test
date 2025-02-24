@@ -1,0 +1,64 @@
+<style>
+  #shopify-section-{{ section.id }}{
+    --section-products-per-row: 2;
+  }
+
+  @media screen and (min-width: 741px) {
+    #shopify-section-{{ section.id }}{
+      --section-products-per-row: 3;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }}{
+      --section-products-per-row: 5;
+    }
+  }
+</style>
+
+<div class="container vertical-breather">
+  <header class="section__header">
+    <div class="text-container">
+      <h3 class="heading h3">You May Also Like</h3>
+    </div>
+  </header>
+
+  <custom-recommendations
+    section-id="{{ section.id }}"
+    product-id="{{ product.id }}"
+    use-automatic-recommendations
+    recommendations-count="{{  }}"
+    class="section {% unless blends_with_background %}section--flush{% endunless %}">
+    <product-list class="product-list product-list--center">
+      <div>
+        <div class="product-list__inner">
+          {%- capture sizes_attribute -%}(max-width: 740px) 52vw, calc(min(100vw - 80px, 1520px) / {{ section.settings.products_per_row }} - {{ gap_width | ceil }}px){%- endcapture -%}
+          {%- for product in recommendations.products -%}
+            {% if product.type == "Accessory" %}
+              {% assign numAccess = numAccess | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+          {% assign myLim = numAccess | plus: 5 %}
+          {%- for product in recommendations.products limit: myLim-%}
+            {% unless product.type == 'Accessory' %}
+              {%- render 'product-item', product: product, reveal: settings.stagger_products_apparition -%}
+            {% endunless %}
+          {%- endfor -%}
+        </div>
+      </div>
+    </product-list>
+  </custom-recommendations>
+</div>
+
+{% schema %}
+  {
+    "name": "Custom Recommendations",
+    "class": "shopify-section--custom-recommend",
+    "settings": [],
+    "presets": [
+      {
+        "name": "Custom Recommendations"
+      }
+    ]
+  }
+{% endschema %}

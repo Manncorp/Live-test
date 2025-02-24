@@ -1,0 +1,197 @@
+.descBlock .blue {
+  font-weight: bold;
+  color: #1372b9;
+}
+
+.descBlock .flex {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  gap: 50px;
+  align-items: stretch;
+}
+
+.descBlock .space-around {
+  justify-content: space-around;
+}
+
+.descBlock .flex > .image {
+  height: 40px;
+  width: 30%;
+}
+
+.descBlock .small-gap {
+  gap: 15px;
+}
+
+.descBlock .icon-container {
+  width: 12%;
+  text-align: center;
+}
+
+.descBlock .icon {
+  width: 66px;
+  margin: auto;
+}
+
+.descBlock {
+  color: black;
+  margin: auto;
+  max-width: 1400px;
+  padding: 30px 10px;
+}
+
+.descBlock.gray {
+  background-color: #f4f4f4;
+}
+
+.descBlock .product-name, .descBlock .heading {
+  text-align: center;
+  font-weight: bold;
+}
+
+.descBlock .product-name, .descBlock .product-text {
+  margin-bottom: 0px;
+  color: black;
+}
+
+.descBlock a.product-border {
+  text-align: center;
+  box-shadow: #43475545 0 0 .25em, #5a7dbc0d 0 .25em 1em;
+  border-radius: 10px;
+  background-color: white;
+  padding: 20px;
+  width: 200px;
+}
+
+.descBlock a.product-border p:last-child {
+  margin-top: 0px;
+}
+
+.descBlock .product-image {
+  width: 100px;
+}
+.descBlock 
+h2.heading {
+  text-align: center;
+}
+
+.descBlock .subheader {
+  text-align: center;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.descBlock .multi-text {
+  text-align: left;
+}
+
+.descBlock .multi-image {
+  width: 30%;
+}
+
+.descBlock .multi-image img {
+  width: 100%;
+}
+
+.descBlock .light-cont {
+  text-align: center;
+  width: 70%;
+}
+
+.descBlock .light-cont p:first-of-type {
+    margin-top: 10px !important;
+    margin-bottom: 0;
+    font-weight: 700;
+}
+
+.descBlock .light-cont p:nth-child(2) {
+  font-style: italic;
+  margin-top: -8px;
+}
+
+.descBlock .light {
+  width: 100%;
+}
+
+.descBlock.light-blue {
+  padding: 35px;
+  background-color: #DEEEFE;
+}
+
+.descBlock .light-cont h3 {
+    margin-top: 50px;
+    margin-bottom: 0px;
+  font-weight: bold;
+}
+
+.descBlock .big-gap {
+  gap: 200px;
+}
+
+.descBlock .green {
+  color: #00AD66;
+  font-weight: bold;
+  margin-bottom: 0px;
+  text-align: center;
+}
+
+.descBlock .circle {
+  margin-top: 7px;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  border: 1px solid black;
+  color: black;
+  text-align: center;
+  font: 12px Arial, sans-serif;
+}
+
+.descBlock .mobile-row {
+  flex-direction: row !important;
+}
+
+.descBlock .desktop-image, .descBlock .mobile-image {
+  width: 100%;
+}
+
+.descBlock .mobile {
+  display: none;
+}
+
+.descBlock .banner {
+  width: 100%;
+  padding: 10px 100px;
+  font-style: italic; 
+}
+
+@media only screen and (max-width: 769px) {
+  .descBlock .flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .descBlock .flex, .descBlock .big-gap, .descBlock .small-gap {
+    gap: 20px;
+  }
+
+  .descBlock .multi-image, .descBlock .icon-container, .descBlock .light-cont {
+    width: 100%;
+  }
+
+  .descBlock .circle {
+    margin-top: -11px;
+  }
+
+  .descBlock a.product-border {
+    width: 95%;
+  }
+
+  .descBlock .desktop {
+    display: none;
+  }
+
+  .descBlock .mobile {
+    display: block;
+  }
+}

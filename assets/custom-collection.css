@@ -1,0 +1,62 @@
+h3.heading.h2 {
+  color: #1372b9;
+}
+.freeshippinginfo {
+  text-align: center; color:#fc5328; font-weight: bold;
+}
+@media screen and (min-width: 741px){
+  .list-collections--grid .list-collections__item-list {
+    grid-template-columns: repeat(auto-fit, calc(200% / 7 - var(--container-gutter) * 2 / 7));
+    grid-auto-flow: row;
+  } 
+}
+
+@media screen and (min-width: 999px) {
+  .list-collections--grid .list-collections__item-list {
+    grid-template-columns: repeat(auto-fit, calc(100% / 7 - var(--container-gutter) * 2 / 7));
+  }
+}
+
+/* For product blocks */
+
+p.product-item-meta__landing-desc, p.product-item-meta__landing-bullets {
+    margin: 10px 0 6px 0;
+    font-size: 13px;
+    line-height: 20px;
+}
+.product-item-meta__title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: -10px;
+  line-height: 140%;
+}
+.price-list {
+  font-size: 16px;
+  font-weight: bold;
+}
+@media screen and (max-width: 514px) {
+  .price-list { font-size: 14px; }
+  p.product-item-meta__landing-desc, p.product-item-meta__landing-bullets, .wc_product_review_badge .wc_review_badge_inner .wc_product_review_title {
+      font-size: 12px !important;
+  }
+  .product-list__inner .product-item .product-item__info, .accessory-products-wrapper .product-item .product-item__info { padding: 10px 6px 16px 6px }
+  .product-list__inner { padding: 2px; }
+}
+span.unit-price-show {
+    font-weight: normal;
+}
+
+.label--highlight {
+    border: 1px solid rgb(var(--product-on-sale-accent));
+    color: rgb(var(--product-on-sale-accent));
+    font-weight: 700;
+    padding: 0 2px;
+    line-height: 140%;
+    vertical-align: middle;
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    background: #fff;
+    width: 60px; 
+    margin: 4px auto 0 auto;
+}

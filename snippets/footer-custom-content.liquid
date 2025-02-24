@@ -1,0 +1,18 @@
+<div class="footer__mobile-section">
+  <div class="footer__blocks--mobile">
+    <div class="footer__block--mobile">
+      {%- if block.settings.title != blank -%}
+        <div class="footer__title">
+          {{ block.settings.title }}
+        </div>
+	  {%- endif -%}
+      <ul class="footer__menu footer__menu--underline">
+        {%- if block.settings.content != blank -%}
+          <li>{{ block.settings.content }}</li>
+        {%- endif -%}
+
+      </ul>
+    </div>
+    
+  </div>
+</div>

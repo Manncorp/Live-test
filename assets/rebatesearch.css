@@ -1,0 +1,300 @@
+    /*** Product Page CSS ***/
+    .box {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: rgba(255,255,255,0.2);
+        border: 2px solid #fff;
+        border-radius: 20px/50px;
+        background-clip: padding-box;
+        text-align: left;
+        font-weight: bold;
+    }
+    .box a.first-search {
+        color: #23b26b;
+        font-size: 1.3em;
+        text-align: center;
+        width: 100%;
+    }
+    .box .money-bag-icon {
+        height: 28px;
+        width: 28px;
+        background-repeat: no-repeat;
+        float: left;
+        margin-right: 4px;
+    }
+
+    /*** Search form CSS ***/
+    .nowrap {
+        white-space: nowrap;
+    }
+    .hide {
+        display: none !important;
+    }
+    .input.hidefield {
+        border: none;
+    }
+    .pad_wrapper {
+        margin: 10px 5px 5px 10px;
+    }
+    .title_wrapper {
+        display: inline-block;
+        width: 170px;
+        color: #23b26b;
+        font-size: 1.3em;
+    }
+    .rebate_popup h3 {
+        font-size: 1em;
+    }
+    .form_container {
+        margin: auto;
+        width: 85%;
+        font-weight: bold;
+    }
+    .form_container input, .form_container select {
+        width: 68%;
+        max-width: 68%;
+        height: 2.5em;
+        border-radius: 5px 5px;
+        border-color: #23b26b;
+        font-weight: normal;
+        padding-left: 10px;
+        border-width: 2px;
+        border-style: solid;
+    }
+    .form_container input:focus-visible, .form_container select:focus-visible {
+        border-color: #198b52;
+    }
+    .rebate_results table {
+        width: 100%;
+    }
+    .rebate_results table td, .rebate_results table th {
+        padding: 5px;
+    }
+    .rebate_results table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .light {
+        color: #aaaaaa;
+        font-style: italic;
+    }
+    span.smallfont {
+        font-size: .75em;
+    }
+    .rebate_result {
+        line-height: 1.6em;
+    }
+    .single-result {
+        margin: 30px 0 10px 0;
+    }
+    .single-result .rebate_result {
+        background: rgb(255 247 218);
+        padding: 10px;
+        font-size: 1em;
+        text-align: center;
+        font-size: 1.3em;
+        line-height: 1.3em;
+    }
+    a.contactus {
+        font-weight: bold;
+    }
+    .search_button_container {
+        text-align: center;
+    }
+    .rebate_search.button {
+        margin: 2% 0 1% 0;
+        padding: 0 15px;
+        border-radius: 7px;
+        background: #23b26b;
+        color: white;
+        font-size: 1.3em;
+        line-height: 2.3em;
+    }
+    .green {
+        color: #23b26b;
+        font-weight: bold;
+    }
+    .greentext {
+        color: #23b26b;
+        font-weight: bold;
+        font-size: 1.2em;      
+    }
+    .justgreen {
+      color: #23b26b;
+    }
+    .redtext {
+        color: #fc5328;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .bigredtext {
+        color: #fc5328;
+        font-size: 1.2em;
+        line-height: 1.3em;
+        font-weight: bold;
+    }
+    h5.footnote {
+        font-size: 0.9em;
+        font-weight: normal;
+        text-align: center;
+        margin-top: 15px;
+    }
+    h5.footnote a {
+        color: #1372b9;
+        font-weight: bold;
+        text-decoration: underline;
+        margin-top: 15px;
+    }
+    .smallerfont {
+        font-size: 0.8em;
+        margin-top: 10px;
+        display: inline-block;
+    }
+    .notopmargin {
+        margin-top: 0;
+    }
+    .bigtopmargin {
+        margin-top: 30px;
+    }
+    .bottommargin {
+      margin-bottom: 20px;
+    }
+    .smallerfootnotefont {
+        font-size: 0.65em;
+    }
+    .rebatefootnote {
+        line-height: 1.3em;
+        /*margin-bottom: 10px;*/
+    }
+    .rebatefootnote.added {
+        line-height: 0.8em;
+        /*margin-bottom: 30px;*/
+    }
+    .utilityname, .linewrapper {
+        display: inline-block;
+        overflow-wrap: normal;
+    }
+    a.search-again {
+        font-weight: normal;
+    }
+    @media screen and (max-width: 1550px){
+        .form_container input, .form_container select {
+            width: 65%;
+            max-width: 65%;
+        }
+    }
+    @media screen and (max-width: 1300px){
+        .form_container input, .form_container select {
+            width: 70%;
+            max-width: 70%;
+        }
+    }
+    @media screen and (max-width: 705px){
+        .form_container input, .form_container select {
+            width: 60%;
+            max-width: 60%;
+        }
+    }
+    @media screen and (max-width: 530px){
+        .form_container {
+            width: 100%;
+        }
+    }
+    @media screen and (max-width: 450px){
+        .form_container input, .form_container select {
+            width: 90%;
+            max-width: 90%;
+        }
+    }
+/*** Modal CSS ***/
+    .overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        transition: opacity 500ms;
+        visibility: hidden;
+        opacity: 0;
+    }
+    .overlay:target {
+        visibility: visible;
+        opacity: 1;
+        z-index: 5;
+    }
+    .rebate_popup {
+        margin: 70px auto;
+        padding: 55px 3% 0.5% 3%;
+        background: #fff;
+        border-radius: 5px;
+        width: 890px;
+        max-width: 890px;
+        position: relative;
+        transition: all 0.25s ease-in-out;
+        max-height: 90vh;
+        overflow: auto;
+
+    }
+    .title-bar {
+        background: #f0f0f0;
+        color: #23b26b;
+        font-weight: bold;
+        font-size: 2.5em;
+        font-family: var(--heading-font-family);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 3px 0;
+        text-align: center;
+    }
+    .rebate_popup .close {
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        transition: all 200ms;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
+        font-size: 1.3em;
+    }
+    .rebate_popup .close:hover {
+        color: #06D85F;
+    }
+    .rebate_popup .content {
+        max-height: 30%;
+        overflow: auto;
+    }
+
+    @media screen and (max-width: 960px){
+        .rebate_popup{
+            width: 95%;
+            margin: 3%;
+        }
+    }
+    @media screen and (max-width: 480px){
+        .title-bar {
+            font-size: 1.95em;
+        }
+    }
+    @media screen and (max-width: 350px){
+        .title-bar {
+            font-size: 1.7em;
+        }
+        .rebate_popup {
+            padding-top: 40px;
+        }
+    }
+    @media screen and (max-width: 315px){
+        .title-bar {
+            font-size: 1.35em;
+        }
+    }
+    @media screen and (max-width: 275px){
+        .rebate_popup {
+            padding-top: 65px;
+        }
+    }
+
+    /*** END Modal CSS ***/

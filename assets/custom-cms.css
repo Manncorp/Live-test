@@ -1,0 +1,139 @@
+
+.page-content {
+  max-width: 1280px;
+}
+
+/* For product blocks */
+
+p.product-item-meta__landing-desc, p.product-item-meta__landing-bullets {
+    margin: 10px 0 6px 0;
+    font-size: 13px;
+    line-height: 20px;
+}
+.product-item-meta__title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: -10px;
+  line-height: 140%;
+}
+.price-list {
+  font-size: 16px;
+  font-weight: bold;
+}
+span.unit-price-show {
+    font-weight: normal;
+}
+
+/* Change sale price & label color...while leaving system-set settings for collections pages */
+.product__info span.price.price--highlight.price--large { color: rgb(13,13,13); font-size: 32px; }
+.product__info span.label.label--highlight { background: #fff; color: grey; border: 1px solid grey; }
+/* end change */
+.product-list__inner .label--highlight {
+    border: 1px solid rgb(var(--product-on-sale-accent));
+    color: rgb(var(--product-on-sale-accent));
+    font-weight: 700;
+    padding: 0 2px;
+    line-height: 140%;
+    vertical-align: middle;
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    background: #fff;
+    width: 60px; 
+    margin: 4px auto 0 auto;
+}
+.price--highlight { font-weight: bold; }
+.product-content__featured-products.top-half span.label.label--highlight {
+    display: none;
+}
+  
+/* For Pages with forms */
+
+.form-block {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.desktop-left-column {
+  margin-bottom: 20px;
+  display: block;
+}
+
+.desktop-left-column,
+.form-block {
+  clear: both;
+}
+
+.desktop-right-column {
+  display: block;
+}
+
+.desktop-right-column,
+.form-block {
+  clear: both;
+}
+
+@media only screen and (min-width: 1000px) {
+  
+  .bulk-container {
+    display: flex;
+  }
+
+  .desktop-left-column {
+    display: block;
+    margin-right: 15px;
+    width: 41%;
+  }
+
+.desktop-left-column.primary-column {
+    width: 100%;
+  }
+
+  .desktop-right-column {
+    display: block;
+    margin-left: 30px;
+    width: 100%;
+  }
+
+  .mobile-block {
+    display: none;
+  }
+
+  .action.submit.primary,
+  .backbutton {
+    width: 35%;
+  }
+}
+
+.img-grid {
+  display: grid;
+  gap: 1rem .5rem; 
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  text-align: center;
+  margin-top: 20px;
+}
+
+
+.twocol img {
+      justify-content: center;
+      max-width: 100%;
+    }
+
+.tabs-nav__item {
+    background: #1372b9;
+    color: #fff;
+    padding: 10px 20px;
+  }
+
+@media screen and (min-width: 536px) {
+  .twocol {
+    display: flex;
+  }
+  .twocol img {
+    max-width: 320px;
+    margin-right: 15px !important; 
+    margin-left: 15px !important;
+  }
+}
+
+

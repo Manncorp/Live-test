@@ -1,0 +1,406 @@
+{% if template contains 'article' and blog.metafields.blogfeeder.use_canonical == 'yes' %}{% assign canonical_url = article.metafields.blogfeeder.canonical %}{% endif %}
+{%- comment -%}
+------------------------------------------------------------------------------------------------------------------------
+NOTE TO DEVELOPERS: welcome to Focal theme! We hope that you will enjoy editing this theme as much as we did for
+  developing it. We have put a lot of work to make this theme as developer friendly as possible by offering you
+  hooks to integrate into critical parts of the theme. You will find the complete technical documentation (including
+  all events, dependencies...) in the "custom.js" file, located in the Assets folder.
+------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<!doctype html>
+
+{%- assign direction = 'ltr' -%}
+{%- case request.locale.iso_code -%}
+  {%- when 'ar' or 'arc' or 'dv' or 'fa' or 'ha' or 'he' or 'kwh' or 'ks' or 'ku' or 'ps' or 'ur' or 'yi' -%}
+    {%- assign direction = 'rtl' -%}
+{%- endcase -%}
+
+<html class="no-js" lang="{{ request.locale.iso_code }}" dir="{{ direction }}">
+  <head>
+<meta name="ahrefs-site-verification" content="b45bfb0ea5e22a9ef32d3578460fd49f36cf53f87bced668c53ef95dfe0a4eee">
+<!-- Matomo Tag Manager -->
+<script>
+var _mtm = window._mtm = window._mtm || [];
+_mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+g.async=true; g.src='https://cdn.matomo.cloud/eledlights.matomo.cloud/container_HWmFmtjL.js'; s.parentNode.insertBefore(g,s);
+</script>
+<!-- End Matomo Tag Manager -->
+{% include 'taginstall-head' %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes height=device-height">
+    <meta name="theme-color" content="{{ settings.header_background }}">
+    
+    <title>{% if page_title == blank %}{{ shop.name }}{% else %}{{ page_title }}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% endif %}</title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | img_url: '96x96' }}" type="image/png">
+    {%- endif -%}
+
+    {%- comment -%}Few prefech to increase performance on commonly used third-parties{%- endcomment -%}
+    <link rel="preconnect" href="https://cdn.shopify.com">
+    <!--<link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">-->
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+
+    {%- unless settings.heading_font.system? and settings.text_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+
+    {%- comment -%}
+      IMPLEMENTATION NOTE: for improving performance, Focal tries to preload images on known pages (such as blog page,
+      product or collection pages). In order to keep a main JS file size minimal, the theme also lazyloads non-essential
+      libraries (such as PhotoSwipe or Flickity) and only loads them on demand.
+    {%- endcomment -%}
+    {%- if request.page_type == 'product' -%}
+      {%- assign selected_media = product.selected_variant.featured_media | default: product.featured_media -%}
+        <link rel="preload" as="fetch" href="{{ product.url }}.js" crossorigin>
+    
+      {%- if product.media.size > 1 -%}
+        <link rel="preload" as="script" href="{{ 'flickity.js' | asset_url }}">
+      {%- endif -%}
+    {%- elsif request.page_type == 'collection' and collection.image -%}
+      <link rel="preload" as="image" media="(max-width: 740px)" imagesizes="100vw" imagesrcset="{%- render 'image-attributes', image: collection.image, sizes: '400,500,600,700,800,900,1000', height_constraint: 600, crop: 'center', sizes_only: true -%}">
+      <link rel="preload" as="image" media="(min-width: 741px)" imagesizes="100vw" imagesrcset="{%- render 'image-attributes', image: collection.image, sizes: '600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600', sizes_only: true -%}">
+    {%- endif -%}
+    {%- render 'preload-banners' | strip_newlines -%}
+    {%- render 'social-meta-tags' | strip_newlines -%}
+    {%- render 'microdata-schema' | strip_newlines -%}
+    {%- render 'css-variables', direction: direction | strip_newlines -%}
+    {%- render 'js-variables', direction: direction | strip_newlines -%}
+    {%- comment -%}Preload important resources{%- endcomment -%}
+
+    {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'vendor.js' | asset_url | preload_tag: as: 'script' }}
+    {{ 'theme.js' | asset_url | preload_tag: as: 'script' }}
+
+    <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}"> 
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="{{ 'cookieshandler.js' | asset_url }}" ></script>
+    <script src="{{ 'cartRebates.js' | asset_url }}" ></script>
+    <script type="text/javascript" src="https://cdn.encentivizer.com/widgets/ee/ee_widget_api.js"></script>
+    <link rel="stylesheet" href="{{ 'rebatesearch.css' | asset_url }}">
+    {%- if request.page_type == 'page' -%}
+    	<link rel="stylesheet" href="{{ 'custom-cms.css' | asset_url }}">
+    {%- endif -%}
+    
+    {%- if request.page_type == 'article' -%}
+    	<link rel="stylesheet" href="{{ 'custom-blog.css' | asset_url }}">
+    {%- endif -%}
+    
+    {%- if request.page_type == 'collection' -%}
+    	<link rel="stylesheet" href="{{ 'custom-collection.css' | asset_url }}">
+    {%- endif -%}
+    
+    {%- if request.page_type == 'product' -%}
+    	<link rel="stylesheet" href="{{ 'custom-product.css' | asset_url }}">
+        <script src="{{ 'custom-product.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    
+    {%- if request.page_type == 'index' -%}
+    	<link rel="stylesheet" href="{{ 'custom-home.css' | asset_url }}">
+    {%- endif -%}
+    
+    {%- if request.page_type == 'blog' -%}
+    	<link rel="stylesheet" href="{{ 'custom-blog-page.css' | asset_url }}">
+    {%- endif -%}
+    
+    
+
+    <script src="{{ 'vendor.js' | asset_url }}" defer></script>
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'custom.js' | asset_url }}" defer></script>
+
+    {{ content_for_header }}
+  
+
+
+  <meta name="google-site-verification" content="yVkbS9wARl9S8tSVdWSpcmuLqiCtOX22uWsWrkIGqhQ" />
+
+  
+ 
+{%- if request.page_type == 'customers/account' -%}
+<script>
+  var name = '{{customer.first_name}} {{customer.last_name}}';
+  var email = '{{customer.email}}';
+ 
+window.LOQ = window.LOQ || [];
+window.LOQ.push(['ready', async LO => {
+    await LO.$internal.ready('visitor');
+    LO.visitor.identify(name, { email: email });
+}]);
+</script>
+{%- endif -%}
+<!-- Matomo -->
+<script>
+  var email = '{{customer.email}}';
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  {% if template == 'collection' %}
+    {% capture tag_list %}{% for tag in collection.all_tags limit:5 %}{{ tag }}{% if forloop.last == false %}::{% endif%}{% endfor %}{% endcapture %}
+    {% assign tag_array = tag_list | split: '::'%}
+        _paq.push(['setEcommerceView',
+        false, // Product name is not applicable for a category view.
+        false, // Product SKU is not applicable for a category view.
+        {{ tag_array | json }}, // Product category, or array of up to 5 categories
+        ]);
+    {% endif %}
+    {% if template == 'product' %}
+        {% capture tag_list %}{% for tag in product.tags limit:5 %}{{ tag }}{% if forloop.last == false %}::{% endif%}{% endfor %}{% endcapture %}
+        {% assign tag_array = tag_list | split: '::'%}
+        _paq.push(['setEcommerceView',
+        {{ product.selected_or_first_available_variant.sku | json }}, // (Required) productSKU
+        {{ product.title | json}}, // (Optional) productName
+        {{ tag_array | json }}, // (Optional) categoryName
+        {{ product.price | money_without_currency }} // (Optional) price
+        ]);
+  {% endif %}
+  {%  if customer.email %}
+    _paq.push(['setUserId', email]);
+  {%  endif %}
+  // Share the tracking cookie across eledlights.com
+    // _paq.push(['setCookieDomain', '*.eledlights.com']);
+  // Tell Matomo the website domain so that clicks on these domains are not tracked as 'Outlinks'
+    // _paq.push(['setDomains', '*.eledlights.com']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://eledlights.matomo.cloud/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '2']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src='//cdn.matomo.cloud/eledlights.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+ 
+  {% render 'shogun-head' %}
+
+
+
+
+
+
+
+
+{% include 'pagefly-app-header' %}</head>
+
+  {%- assign feature_classes = '' -%}
+
+  {%- if settings.show_image_zoom -%}
+    {% assign feature_classes = feature_classes | append: ' features--image-zoom' %}
+  {%- endif -%}
+
+  <body class="no-focus-outline {{ feature_classes }}" data-instant-allow-query-string> 
+    
+    <style>
+      .form-first-name {
+        display: none !important;
+      }
+      .form-last-name {
+        display: none !important;
+      }
+    </style>
+    <script>
+      window.addEventListener("load", () => {
+        let globoForm = document.getElementsByClassName('globo-formbuilder');
+        if (globoForm.length > 0) {
+          var firstInput = document.querySelector('.form-first-name .globo-form-input input')
+          var lastInput = document.querySelector('.form-last-name .globo-form-input input')
+          if (firstInput && lastInput) {
+            var fullInput = document.querySelector('.form-full-name .globo-form-input input')
+            var submitFormBtn = document.querySelector('.wizard__footer button[type="submit"]');
+            submitFormBtn.addEventListener("click", () => {
+              var firstName = fullInput.value.split(" ")[0];
+              var lastName = fullInput.value.split(" ")[1];
+              firstInput.value = firstName;
+              lastInput.value = !lastName ? "" : lastName;
+            })
+          }
+        }
+      })
+    </script>
+
+    
+    {%- comment -%}Common SVG definitions that we are re-using in several places{%- endcomment -%}
+    <svg class="visually-hidden">
+      <linearGradient id="rating-star-gradient-half">
+        <stop offset="50%" stop-color="rgb(var(--product-star-rating))" />
+        <stop offset="50%" stop-color="rgb(var(--product-star-rating))" stop-opacity="0.4" />
+      </linearGradient>
+    </svg>
+
+    <a href="#main" class="visually-hidden skip-to-content">{{ 'general.accessibility.skip_to_content' | t }}</a>
+    <loading-bar class="loading-bar"></loading-bar>
+
+    {%- if request.page_type != 'gift_card' and request.page_type != 'password' -%}
+      {%- section 'announcement-bar' -%}
+      {%- section 'other-announcement-bar' -%}
+      {%- section 'popup' -%}
+      {%- section 'header' -%}
+
+      {%- unless settings.cart_type == 'page' or request.page_type == 'cart' -%}
+        {%- section 'mini-cart' -%}
+      {%- endunless -%}
+    {%- endif -%}
+
+    <div id="main" role="main" class="anchor">
+      {%- comment -%}
+      IMPLEMENTATION NOTE: on collection and search page, the theme was designed to show on mobile the filter bar and/or sort
+        by at the very top of the page. However, due to the fact that sections are isolated, I had to move the code
+        here. Then, the collection section, based on the selected settings, will eventually hide those elements in CSS
+      {%- endcomment -%}
+
+    <!--<a href="#popup1">
+      <div class="questions-button">Questions?</div>
+    </a>
+
+    <div id="popup1" class="overlay">
+      <div class="popup">
+    	<a class="close" href="#title">&times;</a>
+    	<div class="content">
+          <div style="text-align:center; line-height: 30px;">
+            <p class="pros">Text Our<br>Lighting Pros!<br></p>
+            <span style="font-size:24px;">
+              <strong><a data-cke-saved-href="tel:267.266.8330" href="tel:267.266.8330" style="color: #1372b9; text-decoration: none;" tabindex="55" target="_top">267.266.8330</a></strong>
+            </span>
+          </div>
+          <div style="text-align:center">
+            <strong>or email</strong><br><strong></strong>
+            <a data-cke-saved-href="mailto:lights@eledlights.com" href="mailto:lights@eledlights.com" tabindex="138" target="_top"><span style="color:#474748;">lights@eledlights.com</span></a>
+          </div>
+    	</div>
+      </div>
+    </div>
+<style>
+  .questions-button {
+    width: 150px;
+    border-radius: 4px 4px 0 0;
+    padding: 6px;
+    right: 80px;
+    bottom: 0px;
+    display: block;
+    color: white;
+    background: #379ee4;
+    position: fixed;
+    text-align: center;
+    z-index: 5;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 10;
+  }
+  .overlay:target {
+    visibility: visible;
+    pointer-events: all;
+    opacity: 1;
+  }
+  .popup {
+    margin: 200px auto;
+    padding: 60px;
+    background: #fff;
+    border-radius: 5px;
+    width: fit-content;
+    position: relative;
+  }
+  .popup .close {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+  }
+  .popup .close:hover {
+    color: #69a0ca;
+  }
+  .popup .content {
+    max-height: 30%;
+    overflow: auto;
+  }
+  .pros {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+</style> -->
+      {%- if request.page_type == 'collection' or request.page_type == 'search' -%}
+        {%- assign active_filters_count = 0 -%}
+
+        {%- if request.page_type == 'collection' -%}
+          {%- assign filters = collection.filters -%}
+        {%- else -%}
+          {%- assign filters = search.filters -%}
+        {%- endif -%}
+
+        {%- for filter in filters -%}
+          {%- if filter.type == 'list' -%}
+            {%- assign active_filters_count = active_filters_count | plus: filter.active_values.size -%}
+          {%- elsif filter.type == 'price_range' and filter.min_value.value or filter.max_value.value -%}
+            {%- assign active_filters_count = active_filters_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- assign is_toolbar_collapsed = false -%}
+
+        {%- if request.page_type == 'search' and search.results.first.object_type != 'product' -%}
+          {%- assign is_toolbar_collapsed = true -%}
+        {%- endif -%}
+
+        <div id="mobile-facet-toolbar" class="mobile-toolbar {% if is_toolbar_collapsed %}is-collapsed{% endif %} hidden-lap-and-up">
+          <button is="toggle-button" class="mobile-toolbar__item mobile-toolbar__item--filters {% if active_filters_count > 0 %}has-filters{% endif %}" aria-expanded="false" aria-controls="facet-filters">
+            {%- render 'icon' with 'filters' | strip_newlines -%}
+            <span class="mobile-toolbar__item-label">{{- 'collection.general.filters' | t -}}</span>
+          </button>
+
+          <button is="toggle-button" class="mobile-toolbar__item mobile-toolbar__item--sort" aria-expanded="false" aria-controls="sort-by-popover">
+            <span class="mobile-toolbar__item-label">{{- 'collection.general.sort_by' | t -}}</span>
+            {%- render 'icon' with 'chevron' | strip_newlines -%}
+          </button>
+        </div>
+      {%- endif -%}
+
+      {{ content_for_layout }}
+
+      {%- unless request.page_type == 'index' or request.page_type == 'password' or request.page_type == 'gift_card' -%}
+        {%- section 'static-text-with-icons' -%}
+        {%- section 'static-newsletter' -%}
+      {%- endunless -%}
+    </div>
+
+    {%- if request.page_type != 'gift_card' and request.page_type != 'password' -%}
+      {%- section 'footer' -%}
+    {%- endif -%}
+
+<!-- **END backbridge -->
+<!-- Zoho CRM --><script type="text/javascript" src='https://crm.zoho.com/crm/javascript/zcga.js'> </script> <!-- End Zoho -->
+
+{% if content_for_header contains 'hellogtm.helloshopowner.com' %}{%- render 'hello-gtm-data-layer' -%}{% endif %}
+<link rel="stylesheet" href="{{ 'figure-overwrite.css' | asset_url  }}">
+ <!-- **BEGIN** Mercantile App Suite - backbridge Main Include - DO NOT MODIFY -->
+    {% if content_for_header contains 'mas_backbridge.js' %}
+        {% render 'mas-backbridge-custom', shop: shop, theme: theme, product: product, cart: cart, customer: customer %}
+    {% endif %}
+<!-- **END backbridge -->
+<form id="refreshminicartform"></form>
+          
+ {% include 'taginstall-body' %}
+ <!--Zoho Chat --><script type="text/javascript" id="zsiqchat">var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq || {widgetcode: "siq4b496fbee7cf79df8ab547ce42401482f82510e8e56092b43d3ed8d04f5de3b2", values:{},ready:function(){}};var d=document;s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;s.src="https://salesiq.zohopublic.com/widget";t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);</script>
+ </body>
+</html>

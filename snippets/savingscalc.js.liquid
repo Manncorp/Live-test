@@ -1,0 +1,89 @@
+<script>
+    var url = new URL(location.href);
+    var params = new URLSearchParams(url.search);
+    var prodWatts = params.get('w');
+    var prodCost = params.get('c');
+    var prodQty = params.get('q');
+    var instCost = params.get('i');
+    var replaces = params.get('r');
+    if (prodWatts == null) { 
+        prodWatts = 0;
+    }
+    if (prodCost == null) { 
+        prodCost = 0;
+    }
+    if (prodQty == null) { 
+        prodQty = 1;
+    }
+    if(instCost == null) {
+        instCost = 0;
+    }
+    if (replaces == null) { 
+        replaces = 0;
+    }
+
+
+
+    function jsdefer(method) {
+        if (window.jQuery) {
+            method();
+        } else {
+            setTimeout(function() { jsdefer(method); }, 50);
+        }
+    }
+    function callCalc() {
+        $('#newWattage').val(prodWatts);
+        $('#newlightsCost').val(parseFloat(prodCost).toFixed(2));
+        $('#projectCost').val(parseFloat(instCost).toFixed(2));
+        $('#bulbCount').val(prodQty);
+        $('#currentWattage').val(replaces);
+        if(prodWatts != 0) {
+            $('#newWattage').removeClass('error-border');
+        }
+        if(replaces != 0) {
+            $('#currentWattage').removeClass('error-border');
+        }
+        $('.calculatorFormContainer input').on('keyup mouseup', function() {
+            if($(this).val().indexOf(".") != $(this).val().length-1) {
+              if($(this).val() == "") { $(this).val(0); }
+              if($(this).prop('id') != "projectCost") {
+                  if(parseFloat($(this).val()) <= 0) {
+                      $(this).addClass('error-border');
+                  } else {
+                      $(this).removeClass('error-border');
+                  }
+              }
+              calculate();
+            } else {
+              return;
+            }
+        });
+        calculate()
+    }
+    function calculate() {
+        var currentWattage = parseFloat($('#currentWattage').val());
+        var newWattage = parseFloat($('#newWattage').val());
+        var energyCost = parseFloat($('#energyCost').val());
+        var bulbCount = parseFloat($('#bulbCount').val());
+        var hoursOn = parseFloat($('#hoursOn').val());
+        var daysOn = parseFloat($('#daysOn').val());
+        var projectCost = parseFloat($('#projectCost').val()) + (parseFloat($('#newlightsCost').val()) * parseFloat($('#bulbCount').val()));
+        if(projectCost < 0) { projectCost = 0; }
+        var wattageDiff = currentWattage-newWattage;
+        var hoursUseage = hoursOn*daysOn*52;
+        var costWaiting = wattageDiff*energyCost*bulbCount*hoursUseage/1000;
+        var annualSavings = wattageDiff*hoursUseage*bulbCount/1000;
+        var payback = projectCost/costWaiting;
+        var costSavings = costWaiting*5;
+        if(isNaN(costWaiting) || costWaiting < 0) {costWaiting = 0;}
+        if(isNaN(costSavings) || costSavings < 0) {costSavings = 0;}
+        if(isNaN(annualSavings) || annualSavings < 0) {annualSavings = 0;}
+        if(isNaN(payback) || payback == "Infinity" || payback < 0) {payback = 0;}
+console.log(currentWattage,newWattage,energyCost,bulbCount,hoursOn,daysOn,projectCost,wattageDiff,hoursUseage,costSavings,annualSavings,payback);
+        $('.payback').html(payback.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+        $('.annualSavings').html(annualSavings.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+        $('.costSavings').html(costSavings.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+        $('.costWaiting').html(costWaiting.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+    }
+jsdefer(callCalc);
+</script>

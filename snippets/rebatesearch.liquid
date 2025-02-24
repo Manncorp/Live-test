@@ -1,0 +1,67 @@
+{%- if product.tags contains "DLC 5.1" or product.tags contains "DLC 5.0" -%}
+    {% for variant in product.variants %}
+        {% if product.selected_or_first_available_variant.id == variant.id and variant.metafields.data.dlc_product_id != blank %}
+            {% assign vsku = variant.sku | split: " " %}
+        {% endif %}
+    {% endfor %}
+    {% if vsku != blank %}
+
+<script>
+/*
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if 'showrb' URL parameter is present and equals 'yes'
+    var urlParams = new URLSearchParams(window.location.search);
+    var showrb = urlParams.get('showrb');
+
+    // If 'showrb' is not 'yes', hide the element
+    if (showrb !== 'yes') {
+      document.querySelector('.box.rbbox').classList.add('hide');
+    }
+  });
+*/
+</script>
+        <div class="box rbbox">
+            <a class="first-search link hide" href="#rebate_popup1"><div style="background-image: url('{{ 'money-bag-icon.svg' | asset_url }}');" class="money-bag-icon"></div>Find Instant Rebates</a>
+            <div class="rebate-text"></div>
+            <div class="rebatefootnote added"></div>
+        </div>
+        <div id="rebate_popup1" class="overlay">
+            <div class="rebate_popup">
+                <div class="title-bar">
+                    <span>Instant Rebate Estimator</span>
+                    <a class="close" href="javascript:closeAndRefreshCart();">&times;</a>
+                </div>
+                <!--<h3>Find instant rebates for SKU:&nbsp;<span class="textsku">{{vsku[0]}}</span> from utility companies in your area.</h3>-->
+                <!-- <h3>Use our rebate finder below to search for available rebates from utility companies in your area.</h3> -->
+                <h3>&nbsp;</h3>
+                <div class="rebate_container">
+                    <div class="form_container">
+                        <div class="pad_wrapper skuwrapper"><span class="title_wrapper">Product SKU:</span><input type="text" class="sku" value="{{vsku[0]}}"/></div>
+                        <div class="pad_wrapper"><span class="title_wrapper">Install Zip Code:</span><input type="number" class="zip_code"/></div>
+                        <div class="pad_wrapper"><span class="title_wrapper">Utility Provider:</span><select class="utilities"><option value="" SELECTED>Click Here to Choose Your Utility</option></select><span class="hide"> (<span class="utilcount">0</span>) Result(s)</span></div>
+                        <div class="hide pad_wrapper">Category: <select class="categories"><option value="" SELECTED>Click Here to Choose Category</option></select></div>
+                    </div>
+                    <div class="rebate_results">
+                        <div class="hide single-result"></div>
+                        <div class="search_button_container"><a class="rebate_search button" href="javascript:closeAndRefreshCart();">Continue</a></div>
+                        <!--<h5 class="footnote">PLEASE NOTE: Rebates are only available to commercial utility customers, depend on the specifics of your project, and are not guaranteed; ELEDLights will confirm your eligibility.</h5>-->
+                        <h5 class="footnote">Rebates are available for commercial properties. <span class="linewrapper">ELEDLights will confirm your eligibility of rebates.</span> <span class="linewrapper"><a href="/pages/customer-service">Contact with questions.</a></span></h5>
+                        <table id="sortable">
+                            <thead>
+                                <tr>
+                                    <th>Product</th><th class="hide">0</th><th>Rebate</th><th>Utility</th>
+                                </tr>
+                            </thead>
+                            <tbody class="main"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <script type="text/javascript" src="{{ 'rebatesearch.js' | asset_url }}"></script>
+        <script type="text/javascript" defer="defer">RebateSearch.producPageSetup("{{vsku[0]}}");</script> -->
+
+        <script type="text/javascript" src="{{ 'newRebateSearch.js' | asset_url }}"></script>
+        <script type="text/javascript" defer="defer">newRebateSearch.producPageSetup("{{vsku[0]}}");</script>
+    {% endif %}    
+{% endif %}

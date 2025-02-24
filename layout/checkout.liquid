@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <!-- checkout monitor/tracking -->
+    <script>
+        window.onload = function() {
+            var path = window.location.pathname;
+            var pathSegments = path.split('/');
+            var token, step;
+        
+            // Specify script URL
+            const script_url = "https://shopapps.mannsmt.com/eled-apps/checkoutMonitor/checkoutMonitor.php";
+        
+            // Check hostname to distinguish between eledlights.com and eled-dev.myshopify.com
+            if (window.location.hostname === "www.eledlights.com") {
+                var checkoutIndex = pathSegments.indexOf("checkouts");
+                token = checkoutIndex > -1 ? pathSegments[checkoutIndex + 1] : null;
+        
+                // Using URLSearchParams for this type of URL
+                var urlParams = new URLSearchParams(window.location.search);
+                step = urlParams.get('step');
+            } 
+            else if (window.location.hostname === "eled-dev.myshopify.com") {
+                var cnIndex = pathSegments.indexOf("cn");
+                token = cnIndex > -1 ? pathSegments[cnIndex + 1] : null;
+                
+                // The last segment of path is the step for this type of URL
+                step = pathSegments[pathSegments.length - 1];
+            }
+        
+            // Send the data to your PHP script
+            fetch(script_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'checkout_token=' + token + '&step=' + step
+            }).then(function(response) {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                return response.text();
+            }).then(function(text) {
+                console.log(text);
+            }).catch(function(error) {
+                console.log(error);
+            });
+        };
+    </script>
+    <!-- end checkout monitor/tracking -->
+    
+    <!-- Matomo Tag Manager -->
+    <script>
+    // var _mtm = window._mtm = window._mtm || [];
+    // _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+    // var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    // g.async=true; g.src='https://cdn.matomo.cloud/eledlights.matomo.cloud/container_HWmFmtjL.js'; s.parentNode.insertBefore(g,s);
+    // </script>
+    <!-- End Matomo Tag Manager -->
+    {% include 'taginstall-checkout' %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+  <script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=4232321a"></script>
+  <!-- Matomo -->
+  <script>
+    // var email = '{{customer.email}}';
+    // var _paq = window._paq = window._paq || [];
+    // /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    // {%  if customer.email %}
+    //   _paq.push(['setUserId', email]);
+    // {%  endif %}
+    // _paq.push(['trackPageView']);
+    // _paq.push(['enableLinkTracking']);
+    // (function() {
+    //   var u="https://eledlights.matomo.cloud/";
+    //   _paq.push(['setTrackerUrl', u+'matomo.php']);
+    //   _paq.push(['setSiteId', '2']);
+    //   var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    //   g.async=true; g.src='//cdn.matomo.cloud/eledlights.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+    // })();
+  </script>
+  <!-- End Matomo Code -->
+
+    <script>
+    waitForElement(".shopify-cleanslate", function () {
+      trackAppleCheckout();
+    }, 100, 9000);
+    
+    function trackAppleCheckout() {
+      let parentDiv = document.querySelectorAll('.shopify-cleanslate');
+      let theChildren = parentDiv[1].children;
+      let childDiv = theChildren[0];
+      let payButtons = childDiv.children[0].children
+      for (var i = 0; i < payButtons.length; i++) {
+        if (payButtons[i].innerHTML.includes("Apple")) {
+          payButtons[i].setAttribute("onclick", "_paq.push(['trackEvent', 'Checkout', 'Click', 'Apple Pay Checkout']);");
+          // console.log(payButtons[i].innerHTML);
+        }
+      }
+    }
+
+    function waitForElement(selector,callback,frequency,timeout){
+      var startTime=Date.now();
+      (function check(){
+        document.querySelector(selector)?callback():(timeout&&Date.now()-startTime>timeout)||setTimeout(check,frequency)
+      })()
+    };
+    </script>
+  
+  {% render 'shogun-head' %}
+</head>
+  <body>
+    {{ skip_to_content_link }}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+          </header>
+          <main class="main__content" role="main">
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+    <script>
+      (function($) {
+        $(document).on("page:load page:change", function() {
+          {% assign names = "" %}
+          {% assign allnames = "" %}
+          {% for line_item in checkout.line_items %}
+              {% assign allnames = allnames | append: line_item.product.title %}
+              {% assign min_qty = line_item.product.metafields.data.minqty[0] %}
+              {% assign minqty = min_qty | plus: 0 %}
+              {% if minqty != '' and minqty >= 2 and minqty > line_item.quantity %}
+                  {% assign names = names | append: "\nNeed " | append: minqty | append: ". You have " | append: line_item.quantity | append: " of: " | append: line_item.product.title %}
+              {% endif %}
+          {% endfor %}
+          {% if names != "" %}
+            alert('These Products have a required minimum quantity to purchase.\nPlease correct them.\n'+'{{ names }}');
+            window.location.href = "https://www.eledlights.com/cart";
+          {% endif %}
+          var allnames = '{{ allnames }}';
+        });
+      })(Checkout.$);
+      
+      var getUrlParameter = function getUrlParameter(sParam) {
+          var sPageURL = window.location.search.substring(1),
+              sURLVariables = sPageURL.split('&'),
+              sParameterName,
+              i;
+      
+          for (i = 0; i < sURLVariables.length; i++) {
+              sParameterName = sURLVariables[i].split('=');
+      
+              if (sParameterName[0] === sParam) {
+                  return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+              }
+          }
+          return false;
+      };
+      //wait for element to exist - if it ever does....
+      function waitForElm(selector) {
+          return new Promise(resolve => {
+              if (document.querySelector(selector)) {
+                  return resolve(document.querySelector(selector));
+              }
+              const observer = new MutationObserver(mutations => {
+                  if (document.querySelector(selector)) {
+                      resolve(document.querySelector(selector));
+                      observer.disconnect();
+                  }
+              });
+              observer.observe(document.body, {
+                  childList: true,
+                  subtree: true
+              });
+          });
+      }
+      //if on correct step change text as needed
+      (function($) {
+          waitForElm('.section.section--shipping-method .radio-wrapper .small-text').then((elm) => {
+              $('.section.section--shipping-method .radio-wrapper .small-text').html('Estmated Delivery: ' + $('.section.section--shipping-method .radio-wrapper .small-text').html() + ' after shipping.');
+          });
+      })(Checkout.$);
+    </script>
+    <script>
+      //remove after Universal Analytics is phased out 
+      (function CheckoutEnhancedEcommerce() {
+        'use strict';
+        window.addEventListener('load', init);
+        function init() {
+          switch (Shopify.Checkout.step) {
+            case 'contact_information':
+              ga('require', 'ec');
+              ga('ec:setAction', 'checkout', {
+                'step': 1,
+                'option': 'contact_information'
+              });
+              ga('send', 'event', 'checkout', 'contact information');
+              break; 
+            case 'shipping_method':
+              ga('require', 'ec');
+              ga('ec:setAction', 'checkout', {
+                'step': 2,
+                'option': 'shipping_method'
+              });
+              ga('send', 'event', 'checkout', 'shipping method');
+              break; 
+            case 'payment_method':
+              ga('require', 'ec');
+              ga('ec:setAction', 'checkout', {
+                'step': 3,
+                'option': 'payment_method'
+              });
+              ga('send', 'event', 'checkout', 'payment method');
+              break;
+            case 'thank_you':
+              ga('require', 'ec');
+              ga('ec:setAction', 'checkout', {
+                'step': 4,
+                'option': 'thank_you'
+              });
+              ga('send', 'event', 'checkout', 'payment');
+          }
+        }
+      })();
+    </script>
+    <!-- Klaviyo to display forms -->
+    <script async type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=QM5QyK"></script>
+    <!-- End Klaviyo to display forms -->
+  </body>
+</html>

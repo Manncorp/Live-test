@@ -1,0 +1,15 @@
+{%- if product.tags contains "MaxLite" -%}
+  <img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/t/51/assets/maxlite-logo.jpg" style="width: 70px; margin-right: 6px" alt="MaxLite" title="MaxLite">
+{%- elsif product.tags contains "Filamento" -%}
+  <img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/t/51/assets/filamento-logo.png" style="width: 80px; margin-right: 6px" alt="Filamento" title="Filamento">
+  {%- elsif product.vendor contains "LED Living" -%}
+  <img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/t/97/assets/llt23-logo-green-gray.gif" style="width: 80px; margin-right: 6px; padding-top: 2.5px" alt="LED Living" title="LED Living">
+  {%- elsif product.vendor contains "RAB Lighting" -%}
+  <img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/t/97/assets/RAB-logo.gif?v=1712764801" style="width: 50px; margin-right: 6px;padding-top: 1px;" alt="RAB Lighting" title="RAB Lighting">
+  {%- elsif product.vendor contains "Archipelago" -%}
+  <img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/t/97/assets/archipelago.gif?v=1712764809" style="width: 80px; margin-right: 6px;" alt="Archipelago Lighting" title="Archipelago Lighting">
+  {%- elsif product.vendor contains "Nora Lighting" -%}
+  <img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/t/97/assets/Nora-Lighting.gif?v=1712764816" style="width: 50px; margin-right: 6px;" alt="Nora Lighting" title="Nora Lighting">
+  {%- elsif product.vendor contains "Mann Manufacturing" -%}
+  <img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/t/97/assets/mannmanufacturing-140px-wide.png?v=1713968157" style="width: 30px; margin-right: 6px;" alt="Mann Manufacturing" title="Mann Manufacturing">
+{%- endif -%}

@@ -1,0 +1,523 @@
+{%- capture product_form_id -%}product-form-{{ section.id }}-{{ product.id }}{%- endcapture -%}
+
+<div class="product__info">
+  <!-- PRODUCT META -->
+  
+  <product-meta form-id="{{ product_form_id }}" price-class="price--large" class="product-meta">
+    {%- if section.settings.show_vendor -%}
+      <h2 class="product-meta__vendor heading heading--small">
+        {%- assign vendor_handle = product.vendor | handle -%}
+        {%- assign vendor_collection = collections[vendor_handle] -%}
+
+        {%- if vendor_collection != blank -%}
+          <a href="{{ vendor_collection.url }}">{{ product.vendor }}</a>
+        {%- else -%}
+          <a href="{{ product.vendor | url_for_vendor }}">{{ product.vendor }}</a>
+        {%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {% unless featured %}
+      <h1 class="product-meta__title heading">{{ product.title }} </h1>
+    {% else %}
+      <h2 class="product-meta__title heading">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h2>
+    {% endunless %}
+    {% comment %} Tiered Sale Promo Box {% endcomment %}
+    <!--<div class="product-promo__sitewide-tier-sale">
+      <strong style="font-size: 14px; line-height: 18px;">
+        <span style="color: #1372b9;">FREE UPS SHIPPING <span style="position: relative;top: -1px;">&nbsp;|&nbsp;</span> Risk-Free Returns</span>
+      </strong>
+    </div>-->
+    <style>.product-promo__sitewide-tier-sale {background: #deeefe; padding: 10px; font-size: 12px; margin-bottom: 6px; } </style>
+    {% comment %} End Tiered Sale Promo Box {% endcomment %}
+    <div class="wc_product_review_badge" data-handle="{{ product.handle }}" data-product_id="{{ product.id }}"></div>
+
+{%comment%}
+    <div class="product-meta__price-list-container" role="region" aria-live="polite">
+
+      <div class="price-list" data-product-price-list>
+        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+          <span class="price price--highlight price--large">
+            <span class="visually-hidden">{{ 'product.general.sale_price' | t }}</span>
+	
+            {%- if settings.currency_code_enabled -%}
+              {{- product.selected_or_first_available_variant.price | money_with_currency -}}
+            {%- else -%}
+              {{- product.selected_or_first_available_variant.price | money -}}
+            {%- endif -%}
+          </span>
+        
+          <span class="price price--compare">
+            <span class="visually-hidden">{{ 'product.general.regular_price' | t }}</span>
+            {%- if settings.currency_code_enabled -%}
+              {{- product.selected_or_first_available_variant.compare_at_price | money_with_currency -}}
+            {%- else -%}
+              {{- product.selected_or_first_available_variant.compare_at_price | money -}}
+            {%- endif -%}
+          </span>
+        {%- else -%}
+          <span class="price price--large"> 
+            <span class="visually-hidden">{{ 'product.general.sale_price' | t }} </span>       
+            {%- if settings.currency_code_enabled -%}
+              {{- product.selected_or_first_available_variant.price | money_with_currency -}}            
+            {%- else -%}
+             {{- product.selected_or_first_available_variant.price | money -}}                           
+            {%- endif -%}   
+            {% assign current_variant = product.selected_or_first_available_variant %}
+			 {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+            {% comment %}
+            {% unless bundled_variants == blank %}
+      						{% for bundled_variant in bundled_variants %}        					
+          					&nbsp;/ ${{ bundled_variant.price }}  ea                
+      			 {% endfor %}
+             {% endunless %}
+            {% endcomment %}
+          </span>   
+        {%- endif -%}
+        {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
+          <div class="price text--subdued">
+            <div class="unit-price-measurement">
+              <span class="unit-price-measurement__price">{{ product.selected_or_first_available_variant.unit_price | money }}</span>
+              <span class="unit-price-measurement__separator">/</span>
+
+              {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+                <span class="unit-price-measurement__reference-value">{{ product.selected_or_first_available_variant.unit_price_measurement.reference_value }}</span>
+              {%- endif -%}
+
+              <span class="unit-price-measurement__reference-unit">{{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}</span>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      
+      
+		{%comment%}
+
+      <span class="unit-price-show"> 
+      {% assign current_variant = product.selected_or_first_available_variant %}
+	  {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+      {% for bundled_variant in bundled_variants %}        					
+      <span class="unit-price-show">&nbsp;/ {{ product.selected_or_first_available_variant.price | divided_by: bundled_variant.quantity_in_bundle | money }} ea</span>   
+
+      {% endfor %}
+      </span>   
+      {%endcomment%}
+      
+      
+      {%if product.compare_at_price != null%}          
+      <span class="unit-price-show" style="color: rgb(13,13,13)">
+        {%else%}          
+        <span class="unit-price-show">
+          {%endif%}
+
+          {% assign current_variant = product.selected_or_first_available_variant %}
+          {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+          {% for bundled_variant in bundled_variants %}        					
+          <span class="unit-price-show">&nbsp;/ {{ product.selected_or_first_available_variant.price | divided_by: bundled_variant.quantity_in_bundle | money }} ea</span>   
+          {% endfor %}
+        </span>   
+        <span> </span>
+        {%if product.compare_at_price != null%}
+        <span class="unit-price-show">
+          {% assign current_variant = product.selected_or_first_available_variant %}
+          {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+          {% for bundled_variant in bundled_variants %}        					
+          <span class="unit-price-show" style="text-decoration: line-through; color: grey">  / {{ product.compare_at_price | divided_by: bundled_variant.quantity_in_bundle | money}} ea</span>   
+          {% endfor %}
+        </span> 
+        {%endif%}
+      
+      
+      
+      <div class="product-meta__label-list label-list" data-product-label-list>
+        {%- unless product.selected_or_first_available_variant.available -%}
+          <span class="label label--subdued">{{ 'collection.product.sold_out' | t }}</span>
+        {%- elsif product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+          {%- if settings.discount_mode == 'percentage' -%}
+            {%- assign savings = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | round | append: '%' -%}
+          {%- else -%}
+            {%- capture savings -%}{{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}{%- endcapture -%}
+          {%- endif -%}
+
+          <span class="label label--highlight">{{ 'collection.product.discount_html' | t: savings: savings }}</span>
+        {%- endunless -%}
+      </div>
+    </div>
+{%endcomment%}
+      
+      
+
+    <div class="product-meta__price-list-container" role="region" aria-live="polite">
+{%- capture priceblockstart -%}
+        <div class="price-list" data-product-price-list>
+{%- endcapture -%}
+            {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+{%- capture newpriceblock -%}
+                <span class="price price--highlight price--large">
+                    <span class="visually-hidden">{{ 'product.general.sale_price' | t }}</span>
+                    {%- if settings.currency_code_enabled -%}
+                        {{- product.selected_or_first_available_variant.price | money_with_currency -}}
+                    {%- else -%}
+                        {{- product.selected_or_first_available_variant.price | money -}}
+                    {%- endif -%}
+                </span>
+{%- endcapture -%}
+{%- capture oldpriceblock -%}
+                <span class="price price--compare">
+                    <span class="visually-hidden">{{ 'product.general.regular_price' | t }}</span>
+                    {%- if settings.currency_code_enabled -%}
+                        {{- product.selected_or_first_available_variant.compare_at_price | money_with_currency -}}
+                    {%- else -%}
+                        {{- product.selected_or_first_available_variant.compare_at_price | money -}}
+                    {%- endif -%}
+                </span>
+{%- endcapture -%}
+            {%- else -%}
+{% assign oldpriceblock = '' %}
+{%- capture newpriceblock %}
+                <span class="price price--large"> 
+                    <span class="visually-hidden">{{ 'product.general.sale_price' | t }} </span>       
+                    {%- if settings.currency_code_enabled -%}
+                        {{- product.selected_or_first_available_variant.price | money_with_currency -}}            
+                    {%- else -%}
+                        {{- product.selected_or_first_available_variant.price | money -}}                           
+                    {%- endif -%}   
+                    {% assign current_variant = product.selected_or_first_available_variant %}
+			        {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+                    {% comment %}
+                    {% unless bundled_variants == blank %}
+                                    {% for bundled_variant in bundled_variants %}        					
+                                    &nbsp;/ ${{ bundled_variant.price }}&nbsp;ea               
+                        {% endfor %}
+                    {% endunless %}
+                    {% endcomment %}
+                </span>
+{%- endcapture -%} 
+            {%- endif -%}
+{%- capture subduedblock -%}
+            {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
+                <div class="price text--subdued">
+                    <div class="unit-price-measurement">
+                        <span class="unit-price-measurement__price">{{ product.selected_or_first_available_variant.unit_price | money }}</span>
+                        <span class="unit-price-measurement__separator">/</span>
+
+                        {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+                            <span class="unit-price-measurement__reference-value">{{ product.selected_or_first_available_variant.unit_price_measurement.reference_value }}</span>
+                        {%- endif -%}
+
+                        <span class="unit-price-measurement__reference-unit">{{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}</span>
+                    </div>
+                </div>
+            {%- endif -%}
+{%- endcapture -%}
+{%- capture priceblockend -%}
+        </div>
+{%- endcapture -%}
+      
+      
+		{%comment%}
+            <h1>hello world!!!!!!!!!!!!!!!!!!!!!!!!</h1>
+        <span class="unit-price-show"> 
+        {% assign current_variant = product.selected_or_first_available_variant %}
+	    {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+        {% for bundled_variant in bundled_variants %}        					
+        <span class="unit-price-show">&nbsp;/ {{ product.selected_or_first_available_variant.price | divided_by: bundled_variant.quantity_in_bundle | money }}&nbsp;ea</span>   
+
+        {% endfor %}
+        </span>   
+        {%endcomment%}
+      
+{%- capture newunitpriceblock -%}      
+        {%if product.compare_at_price != null%}
+            <span class="unit-price-show" style="color: rgb(13,13,13)">
+        {%else%}          
+            <span class="unit-price-show">
+        {%endif%}
+            {% assign current_variant = product.selected_or_first_available_variant %}
+            {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+            {% assign number_bundle_items = 0 %}
+        	{% for bundled_variant in bundled_variants %}
+           		{% assign number_bundle_items = number_bundle_items | plus: 1 %}
+        	{% endfor %}
+        	{% if number_bundle_items == 1 %} 
+          		{% for bundled_variant in bundled_variants %}        					
+            		<span class="unit-price-show">/ {{ product.selected_or_first_available_variant.price | divided_by: bundled_variant.quantity_in_bundle | money }}&nbsp;ea</span>   
+          		{% endfor %}
+        	{% endif %}
+        </span>   
+{%- endcapture -%}
+{%- capture oldunitpriceblock -%}
+        <span> </span>
+        {%if product.compare_at_price != null%}
+            <span class="unit-price-show">
+                {% assign current_variant = product.selected_or_first_available_variant %}
+                {% assign bundled_variants = current_variant.metafields.simple_bundles.bundled_variants.value %}
+                {% assign number_bundle_items = 0 %}
+        		{% for bundled_variant in bundled_variants %}
+        	   		{% assign number_bundle_items = number_bundle_items | plus: 1 %}
+        		{% endfor %}
+        		{% if number_bundle_items == 1 %} 
+              		{% for bundled_variant in bundled_variants %}        					
+                    	<span class="unit-price-show" style="text-decoration: line-through; color: grey">/ {{ product.compare_at_price | divided_by: bundled_variant.quantity_in_bundle | money}}&nbsp;ea</span>   
+                	{% endfor %}
+              	{% endif %}
+            </span> 
+        {%endif%}
+{%- endcapture -%}
+      {{ priceblockstart }}
+<div>
+      <div class="newpriceline">
+        {{ newpriceblock }}
+        {{ newunitpriceblock }}
+      </div>
+      <div class="oldpriceline">
+        {{ oldpriceblock }}
+        {{ oldunitpriceblock }}
+      </div>
+</div>
+      {{ subduedblock }}
+      {{ priceblockend }}
+
+      
+        <div class="product-meta__label-list label-list" data-product-label-list>
+            {%- unless product.selected_or_first_available_variant.available -%}
+                <span class="label label--subdued">{{ 'collection.product.sold_out' | t }}</span>
+            {%- elsif product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+                {%- if settings.discount_mode == 'percentage' -%}
+                    {%- assign savings = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | round | append: '%' -%}
+                {%- else -%}
+                    {%- capture savings -%}{{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money }}{%- endcapture -%}
+                {%- endif -%}
+
+                <span class="label label--highlight">{{ 'collection.product.discount_html' | t: savings: savings }}</span>
+            {%- endunless -%}
+        </div>
+    </div>
+    {%  if product.metafields.data.estimated_federal_tax_credit.value %}
+        <div class="product-meta__est_tax_credit">Est. Federal Tax Credit: {{  product.metafields.data.estimated_federal_tax_credit }}</div>
+    {%  endif %}
+    {% if product.metafields.data.spec_warranty.value %}
+      {% case product.type %}
+        {% when 'UVC' %}
+        {% when 'Accessory' %}
+        {% else %}
+          <div class="product-meta__warranty">
+          {% if product.metafields.data.spec_warranty.value != "6 Months" %}
+              {% if product.metafields.data.spec_warranty.value != "90 Days" and product.metafields.data.spec_warranty.value != "90 days" %}
+                {{ product.metafields.data.spec_warranty.value | downcase | remove: " years" }}-Year Warranty
+              {% else %}90-Day Warranty
+              {% endif %}
+          {%  else  %}6-Month Warranty
+          {%  endif %}</div>
+      {% endcase %}
+    {% endif %}
+    {%- render 'rebatesearch', product: product | strip_newlines -%}
+    {%- if section.settings.show_taxes_included -%}
+      {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+        <p class="product-meta__taxes-included text--small">
+          {%- if cart.taxes_included -%}
+            {{ 'product.general.include_taxes' | t }}
+          {%- endif -%}
+
+          {%- if shop.shipping_policy.body != blank -%}
+            {{ 'product.general.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+    <product-payment-terms form-id="{{ product_form_id }}">
+      {%- assign product_installment_form_id = 'product-installment-form-' | append: section.id | append: '-' | append: product.id -%}
+
+      {%- form 'product', product, id: product_installment_form_id -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {{- form | payment_terms -}}
+      {%- endform -%}
+    </product-payment-terms>
+
+   {% if product.metafields.data.benefit_bullets != null %}
+      <div class="benefit-bullets">
+        {{ product.metafields.data.benefit_bullets }}
+      </div>
+      <div class="gray-bar"></div>
+    {% endif %}
+
+    {%- if section.settings.show_product_rating or section.settings.show_sku -%}
+      <div class="product-meta__reference">
+        {%- if section.settings.show_product_rating -%}
+          <a href="{% if featured %}{{ product.url }}{% endif %}#product-{{ product.id }}-reviews-pocket" is="review-link" data-smooth-scroll class="product-meta__reviews-badge hidden-lap-and-up">{%- render 'product-rating', product: product | strip_newlines -%}</a>
+          <a href="{% if featured %}{{ product.url }}{% endif %}#product-{{ product.id }}-tabs" is="review-link" data-smooth-scroll class="product-meta__reviews-badge hidden-pocket">{%- render 'product-rating', product: product | strip_newlines -%}</a>
+        {%- endif -%}
+
+        {%- if section.settings.show_sku -%}
+          <span class="product-meta__sku text--subdued text--xxsmall" {% if product.selected_or_first_available_variant.sku == blank %}style="display: none"{% endif %} data-product-sku-container>
+            {% render 'product-mfr-logo' %}
+            {{- 'product.general.sku' | t }}
+            <span class="product-meta__sku-number" data-product-sku-number>{{ product.selected_or_first_available_variant.sku }}</span>
+            {% if current_variant.inventory_quantity > 19 and current_variant.inventory_management == 'shopify' %}
+              {% if number_bundle_items == 1 %}
+                &nbsp;|&nbsp;<em>{{current_variant.inventory_quantity }} packs in stock</em>
+              {% else %}
+                &nbsp;|&nbsp;<em>{{ current_variant.inventory_quantity }} in stock</em>
+              {% endif %}
+            {% endif %}
+            {%  comment %}Risk Free Trial{%  endcomment %}
+            {%  if current_variant.inventory_quantity > 0 %}
+              <div class="tip" onclick="myFunction()"><img src="https://cdn.shopify.com/s/files/1/0553/0605/9812/files/info-icon-dkg.svg" width="12px" height="12px">
+                <span style="text-decoration: underline">Risk-Free</span>
+                <span class="tiptext" id="myTip"><strong>ELEDLights Offers Risk-Free Returns!</strong> If you're not satisfied with your lights for any reason, you can return them within 30 days <a href="https://www.eledlights.com/pages/returns-policy" target="_blank">Returns Policy</a></span>
+              </div>  
+              <script>
+              // When the user clicks on <div>, open the popup
+              function myFunction() {
+                var popup = document.getElementById("myTip");
+                popup.classList.toggle("show");
+              }
+              </script>
+            {%  endif %}
+            </span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    
+     
+  </product-meta>
+  {%- render 'product-form', product: product, update_url: update_url | strip_newlines -%}
+
+  {%- assign help_page = section.settings.help_page -%}
+  {%- if section.settings.show_share_buttons or help_page != blank -%}
+    <div class="product-meta__aside">
+      {%- if section.settings.show_share_buttons -%}
+        <div class="product-meta__share text--subdued">
+          {%- assign share_url = shop.url | append: product.url -%}
+          {%- assign twitter_text = product.title | url_param_escape -%}
+          {%- assign pinterest_description = product.description | strip_html | truncatewords: 15 | url_param_escape -%}
+          {%- assign pinterest_image = product.image | img_url: '800x' | prepend: 'https:' -%}
+
+          <button is="share-toggle-button" share-url="{{ share_url | escape }}" share-title="{{ product.title | escape }}" class="product-meta__share-label link hidden-tablet-and-up" aria-controls="mobile-share-buttons-{{ section.id }}" aria-expanded="false">{{ 'product.general.share' | t }}</button>
+          <div class="product-meta__share-label hidden-phone">{{ 'product.general.share' | t }}</div>
+
+          <popover-content id="mobile-share-buttons-{{ section.id }}" class="popover hidden-tablet-and-up">
+            <span class="popover__overlay"></span>
+
+            <header class="popover__header">
+              <span class="popover__title heading h6">{{- 'article.general.share' | t -}}</span>
+
+              <button type="button" class="popover__close-button tap-area tap-area--large" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
+                {%- render 'icon' with 'close' | strip_newlines -%}
+              </button>
+            </header>
+            <div class="mobile-share-buttons">
+              <a class="mobile-share-buttons__item mobile-share-buttons__item--facebook" href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}">
+                {%- render 'icon' with 'facebook-share-mobile' | strip_newlines -%} Facebook
+              </a>
+
+              <a class="mobile-share-buttons__item mobile-share-buttons__item--pinterest" href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.pinterest_pin' | t }}">
+                {%- render 'icon' with 'pinterest-share-mobile' | strip_newlines -%} Pinterest
+              </a>
+
+              <a class="mobile-share-buttons__item mobile-share-buttons__item--twitter" href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">
+                {%- render 'icon' with 'twitter-share-mobile' | strip_newlines -%} Twitter
+              </a>
+
+              <a class="mobile-share-buttons__item mobile-share-buttons__item--mail" href="mailto:?&subject={{ article.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">
+                {%- render 'icon' with 'email-share-mobile' | strip_newlines -%} {{ 'general.social.email_label' | t }}
+              </a>
+            </div>
+          </popover-content>
+
+          <div class="product-meta__share-button-list hidden-phone">
+            <a class="product-meta__share-button-item product-meta__share-button-item--facebook link tap-area" href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}">
+              {%- render 'icon' with 'facebook', width: 8, height: 14 | strip_newlines -%}
+            </a>
+
+            <a class="product-meta__share-button-item product-meta__share-button-item--pinterest link tap-area" href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.pinterest_pin' | t }}">
+              {%- render 'icon' with 'pinterest', width: 10, height: 14 | strip_newlines -%}
+            </a>
+
+            <a class="product-meta__share-button-item product-meta__share-button-item--twitter link tap-area" href="https://twitter.com/share?{% if twitter_text != blank %}text={{ twitter_text }}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">
+              {%- render 'icon' with 'twitter', width: 17, height: 14 | strip_newlines -%}
+            </a>
+
+            <a class="product-meta__share-button-item product-meta__share-button-item--mail link tap-area" href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">
+              {%- render 'icon' with 'share', width: 13, height: 13 | strip_newlines -%}
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if help_page != blank -%}
+        <button is="toggle-button" class="product-meta__help link text--subdued hidden-tablet-and-up" aria-controls="product-{{ section.id }}-help-popover" aria-expanded="false">{{ 'product.general.need_help' | t }}</button>
+        <button is="toggle-button" class="product-meta__help link text--subdued hidden-phone" aria-controls="product-{{ section.id }}-help-drawer" aria-expanded="false">{{ 'product.general.need_help' | t }}</button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  {%- if help_page != blank -%}
+    {%- comment -%}Drawer for tablet and higher{%- endcomment -%}
+    <drawer-content id="product-{{ section.id }}-help-drawer" class="drawer drawer--large hidden-phone">
+      <span class="drawer__overlay"></span>
+
+      <header class="drawer__header">
+        <p class="drawer__title heading h6">{{ help_page.title }}</p>
+
+        <button type="button" class="drawer__close-button tap-area" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
+          {%- render 'icon' with 'close' | strip_newlines -%}
+        </button>
+      </header>
+
+      <div class="drawer__content drawer__content--padded-start">
+        <div class="rte">
+          {{- help_page.content -}}
+        </div>
+      </div>
+    </drawer-content>
+
+    {%- comment -%}Popover for mobile{%- endcomment -%}
+    <popover-content hidden id="product-{{ section.id }}-help-popover" class="popover hidden-lap-and-up">
+      <span class="popover__overlay"></span>
+
+      <header class="popover__header">
+        <p class="popover__title heading h6">{{ help_page.title }}</p>
+
+        <button type="button" class="popover__close-button tap-area tap-area--large" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
+          {%- render 'icon' with 'close' | strip_newlines -%}
+        </button>
+      </header>
+
+      <div class="popover__content">
+        <div class="rte">
+          {{- help_page.content -}}
+        </div>
+      </div>
+    </popover-content>
+  {%- endif -%}
+</div>
+<script>
+  
+	let option1_buttons = document.querySelectorAll("input[name='option1']");
+  	let option2_buttons = document.querySelectorAll("input[name='option2']");
+  	let option3_buttons = document.querySelectorAll("input[name='option3']");
+  	let delayTime = 30;
+  
+  
+    option1_buttons.forEach((element)=>{
+      element.addEventListener('change', function(){
+      	setTimeout(function(){location.reload()}, delayTime);
+      });
+    });
+  
+    option2_buttons.forEach((element)=>{
+        element.addEventListener('change', function(){
+          
+          setTimeout(function(){location.reload()}, delayTime);
+        });
+      });
+  	option3_buttons.forEach((element)=>{
+        element.addEventListener('change', function(){
+          
+          setTimeout(function(){location.reload()}, delayTime);
+        });
+    });
+  
+</script>

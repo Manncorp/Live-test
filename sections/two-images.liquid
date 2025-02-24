@@ -1,0 +1,85 @@
+<style>
+  
+  .two-img-wrap {
+    display: flex;
+    justify-content: center;
+    background-color: #f4f4f4;
+    padding: 35px 0;
+  }
+  
+  .two-img-wrap div div{
+    padding: 15px;
+  }
+  
+  .two-img-wrap img {
+    box-shadow: rgba(0,0,0,.25) 4px 4px 4px;
+  }
+  
+  
+  @media screen and (min-width: 768px) {
+    .two-img-wrap>div {
+      display: flex;
+      max-width: 1350px;
+    }
+  }
+  </style>
+  
+  {%- assign image_one = section.settings.image_one -%}
+  {%- assign image_two = section.settings.image_two -%}
+  
+    <div class="two-img-wrap">
+      <div>
+        <div>
+          <a href="{{ section.settings.link_one }}">
+            <picture>   
+              <source media="(max-width: 740px)" {% render 'image-attributes', image: image_one %}>
+              <img loading="eager" {% render 'image-attributes', image: image_one, sizes: '600,700,800,1000,1200,1400' %}>
+            </picture>
+          </a>
+        </div>
+        <div>
+          <a href="{{ section.settings.link_two }}">
+            <picture>
+              <source media="(max-width: 740px)" {% render 'image-attributes', image: image_two %}>
+              <img loading="eager" {% render 'image-attributes', image: image_two, sizes: '600,700,800,1000,1200,1400' %}>
+            </picture>
+          </a>
+        </div>
+      </div>
+    </div>
+  
+  
+  {% schema %}
+  {
+    "name": "Two Images",
+    "class": "shopify-section--large-two-images",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image_one",
+        "label": "Image One"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_two",
+        "label": "Image Two"
+      },
+      {
+        "type": "url",
+        "id": "link_one",
+        "label": "Box One Link"
+      },
+      {
+        "type": "url",
+        "id": "link_two",
+        "label": "Box Two Link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Two Images"
+      }
+    ]
+  }
+  {% endschema %}
+  

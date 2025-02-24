@@ -1,0 +1,106 @@
+<!-- TAGinstall START -->
+<script>
+(function(w) {
+  var first = document.getElementsByTagName('script')[0];
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://gtm.taginstall.com/sites/ba421e5d451e0f99648fd6f840a73bb85135a7bb5f19a3f11491240d824640eb/gtm-data-layer-108-210715340.js';
+  script.addEventListener ("load", function() {
+    {%- capture checkout_items_json -%}
+      {%- for line_item in checkout.line_items -%}
+        {
+          id: {{line_item.sku| default: line_item.variant_id | append: '' | json}},
+          price: {{line_item.price | divided_by: 100.0 | append: '' | json}},
+          brand: {{line_item.vendor | json}},
+          category: {{line_item.product.type | json}},
+          variant: {{line_item.variant.title | default: "Default Variant" | json}},
+          quantity: {{line_item.quantity  | append: '' | json}},
+          shopifyId: 'shopify_US_{{line_item.product_id}}_{{line_item.variant_id}}',
+          productId: {{line_item.product_id | append: '' | json}},
+          variantId: {{line_item.variant_id | append: '' | json}},
+          name: {{line_item.product.title | json}},
+          coupon: '{{line_item.line_level_discount_allocations | map: "title" | first}}',
+        }
+        {%- if forloop.last == false -%},{%- endif -%}
+      {%- endfor -%}
+    {%- endcapture %}
+
+    function start() {
+    
+      w.__TAGinstall.onCheckoutStep({
+        checkoutStep: Shopify.Checkout.step, 
+        items: [{{checkout_items_json | strip_newlines}}], 
+        shopCurrency: {{checkout.currency | json}}
+      });
+      
+      {% if checkout_html_classes contains 'page--thank-you' %}
+        var customer;
+        {% if checkout.customer %}
+          customer = {
+            customerType: 'loggedIn',
+            customerId: {{checkout.customer.id|append:""|json}},
+            customerFirstName: {{checkout.billing_address.first_name | json}},
+            customerLastName: {{checkout.billing_address.last_name | json}},
+            customerEmail: {{checkout.email|json}},
+            customerOrdersCount: {{checkout.customer.orders_count|json}},
+            customerTotalSpent: {{checkout.customer.total_spent| divided_by: 100.0}},
+            customerAddress1: {{checkout.billing_address.address1 | json}},
+            customerAddress2: {{checkout.billing_address.address2 | json}},
+            customerCity: {{checkout.billing_address.city | json}},
+            customerCountry: {{checkout.billing_address.country | json}},
+            customerCountryCode: {{checkout.customer.default_address.country_code | downcase | json}},
+            customerPhone: {{checkout.customer.phone | json}},
+            customerProvince: {{checkout.billing_address.province | json}},
+            customerZip: {{checkout.billing_address.zip | json}},
+            hashedCustomerFirstName: {{checkout.billing_address.first_name | sha256 | json}},
+            hashedCustomerLastName: {{checkout.billing_address.last_name | sha256 | json}},
+            hashedCustomerEmail: {{checkout.email | sha256 | json}}
+          };
+        {% endif %}
+              
+        {% assign transID = checkout.transactions | map: "id" | first %}
+
+        var transactionData = {
+          'id': '{{order_name | default: transID}}',
+          'orderId': '{{order_number}}',
+          'affiliation': '{{shop.domain}}',
+          'revenue': '{{checkout.total_price | divided_by: 100.0}}',
+          'subtotal': '{{checkout.subtotal_price | divided_by: 100.0}}',
+          'tax':'{{checkout.tax_price | divided_by: 100.0}}',
+          'shipping': '{{checkout.shipping_price | divided_by: 100.0}}',
+          'coupon': '{{checkout.discount_applications | map: "title" | first}}',
+          'totalDiscount': '{{checkout.discounts_amount | divided_by: 100.0}}',
+          'itemsCount': '{{checkout.line_items | size}}',
+        };
+        var orderItems = [{{checkout_items_json | strip_newlines}}];
+
+        if (Shopify.Checkout.step === 'thank_you') {
+          w.__TAGinstall.onTransactionComplete({
+            customer,
+            orderItems,
+            transactionData,
+            shopCurrency: '{{order.currency}}',
+          });
+        }
+
+      {% endif %}
+
+    }
+    
+    if (w.__TAGinstall && w.__TAGinstall.boot) {
+      w.__TAGinstall.boot(start);
+    }
+
+  }, false);
+  first.parentNode.insertBefore(script, first);
+})(window);
+
+</script>
+<!-- TAGinstall END -->
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TVZSS4P');</script>
+<!-- End Google Tag Manager -->

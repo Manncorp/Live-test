@@ -1,0 +1,102 @@
+{% if product.metafields.data.accessory_handles.value.size >= 1 %}<a name="accessories" style="padding-top: 100px; margin-top: -100px; display: block;"></a>
+    <div style="background: {{ section.settings.sectionColor | escape }}" class="content-container container accessories-container">
+        <h3 class="section__header heading h3">
+            {{ section.settings.sectionTitle | escape }} for {{  product.title }}
+        </h3>
+        <div class="content">
+            {%- assign accessorycount = false -%}
+            {%- assign accessorychecks = product.metafields.data.accessory_handles.value | split: ',' -%}
+            {%- for accessorycheck in accessorychecks -%}
+                {% if accessory != '' %}
+                    {% if all_products[accessorycheck].available == true %}
+                        {% assign accessorycount = true %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if accessorycount == true %}
+                <div class="accessory-products-wrapper">
+                {%- assign accessories = product.metafields.data.accessory_handles.value | split: ',' -%}
+                {%- for accessory in accessories -%}
+                    {% if accessory != '' %}
+                        {% if all_products[accessory].available == true %}
+                            <div class="accessory-product">
+                                {%- render 'product-item', product: all_products[accessory], reduced_content: false, reduced_font_size: true, is_small_img: true, sizes_attribute: '(max-width: 740px) 105px, 215px' -%}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <style>
+                .accessory-products-wrapper {
+                    display: grid;
+                    grid-template-columns: repeat({{ section.settings.maxProdPerRowFull }},1fr);
+                }
+                .accessory-products-wrapper .wc_product_review_badge {
+                    display: none;
+                }
+                @media only screen and (max-width: 1200px) {
+                    .accessory-products-wrapper {
+                        grid-template-columns: repeat({{ section.settings.maxProdPerRow1200 }},1fr);
+                    }
+                }
+                @media only screen and (max-width: 560px) {
+                    .accessory-products-wrapper {
+                        grid-template-columns: repeat({{ section.settings.maxProdPerRow560 }},1fr);
+                    }
+                }
+                </style>
+            {% endif %}
+        </div>
+        <div><a class="back-top-top" href="#">(Return to main product)</a></div>
+    </div>
+{% endif %}
+{% schema %}
+{
+    "name": "Accessories Section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "sectionTitle",
+            "label": "Section Title",
+            "default": "Accessories"
+        },
+        {
+            "type": "color",
+            "id": "titleColor",
+            "label": "Title Text Color",
+            "default": "#1372B9"
+        },
+        {
+            "type": "text",
+            "id": "maxProdPerRowFull",
+            "label": "Max count of products per row",
+            "default": "5"
+        },
+        {
+            "type": "text",
+            "id": "maxProdPerRow1200",
+            "label": "Max count of products per row below 1200px width",
+            "default": "4"
+        },
+        {
+            "type": "text",
+            "id": "maxProdPerRow560",
+            "label": "Max count of products per row below 560px width",
+            "default": "2"
+        }
+    ],
+    "presets": [
+        {
+        "name": "Accessories Section",
+        "category": "Custom"
+        }
+    ]
+}
+  
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

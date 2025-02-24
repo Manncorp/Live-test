@@ -1,0 +1,74 @@
+<style>
+  @media screen and (min-width: 999px) {
+    #shopify-section-{{ section.id }} {
+      --section-products-per-row: 6;
+    }
+  }
+</style>
+
+{% assign last_added_product = cart.items.first.product %}
+{% assign accessory_handles = last_added_product.metafields.data.accessory_handles.value | split: ',' %}
+
+{% if accessory_handles.size > 0 %}
+  <div class="container container--medium vertical-breather vertical-breather--tight vertical-breather--margin">
+    {%- if section.settings.title != blank or section.settings.subheading != blank -%}
+      <header class="section__header">
+        <div class="text-container">
+          {%- if section.settings.title != blank -%}
+            {%  assign product_name = cart.items.first.title | split: " – " %}
+            {%  assign product_name = product_name[0] | split: " - " %}
+            <h2 class="heading h4">{{ product_name[0] }} {{ section.settings.title }}</h2>
+          {%- endif -%}
+        </div>
+      </header>
+    {%- endif -%}
+
+    <product-list {% if settings.stagger_products_apparition %}stagger-apparition{% endif %} class="product-list">
+      {%- assign largest_image_aspect_ratio = 1 -%}
+      {%- assign shown_accessories_count = 0 -%}
+
+      <div class="scroller accessories">
+        <div class="product-list__inner product-list__inner--scroller product-list__inner--desktop-no-scroller hide-scrollbar">
+          {%- for handle in accessory_handles -%}
+            {% comment %}
+            {%- if shown_accessories_count >= 4 -%}
+              {%- break -%}
+            {%- endif -%}
+            {% endcomment %}
+            {%- assign accessory = all_products[handle] -%}
+            {%- assign matching_product = cart.items | where: 'product_id', accessory.id -%}
+
+            {%- if matching_product.size == 0 -%}
+              {%- if accessory.available == true -%}
+                {%- assign shown_accessories_count = shown_accessories_count | plus: 1 -%}
+                {%- assign largest_image_aspect_ratio = largest_image_aspect_ratio | at_most: accessory.featured_media.aspect_ratio -%}
+
+                {%- capture sizes_attribute -%}(max-width: 740px) 75vw, min({{ 100.0 | divided_by: 6 | ceil }}vw, {{ 1520.0 | divided_by: 6 | ceil }}px){%- endcapture -%}
+                {%- render 'product-item', product: accessory, sizes_attribute: sizes_attribute, reveal: settings.stagger_products_apparition -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </product-list>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Cart Accessories",
+  "class": "shopify-section--cart-accessories",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Up to 6 accessories, based on the items in your cart (top to bottom) that have accessories and are not already in the cart."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Accessories"
+    }
+  ]
+}
+{% endschema %}

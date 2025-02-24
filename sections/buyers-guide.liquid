@@ -1,0 +1,155 @@
+<div style="background: {{section.settings.sectionColor}}" class="content-container container">
+  <h2 class="heading h2" {%  unless section.settings.titleColor contains '' %}style="color: {{section.settings.titleColor}}"{%  endunless %} class="heading h3">
+    {{section.settings.title}}
+  </h2>
+  <div class="content">
+    {% for block in section.blocks %}
+      <div class="inner" {%  unless block.settings.color_background contains '' %}style="background:{{block.settings.color_background}}"{%  endunless %}>
+        {% unless block.settings.contentLink contains 'youtube' %}
+          <a href="{{block.settings.contentLink}}" target="_blank">
+            <div class="guide-image"><img class="fix-width" src="{{block.settings.image | img_url: 'master'}}"/></div>
+            <h3 {%  unless block.settings.color_header contains '' %}style="color: {{block.settings.color_header}}"{%  endunless %}>{{block.settings.itemTitle}}</h3>
+            <p {%  unless block.settings.color_body contains '' %}style="color: {{block.settings.color_body}}"{%  endunless %}>{{block.settings.itemDescription}}</p>
+          </a>
+        {% else %}
+          {% comment %} 
+            Code for getting youtube thumbnail by junaidkbr on github: https://gist.github.com/junaidkbr/79aaf8633f4e995d3bfda7f94ca3d94a
+          {% endcomment %}
+          {% assign video_url = block.settings.contentLink %}
+          {% assign thumbnail_url = '' %}
+		  {% assign video_id = video_url | split: '/' | last %}
+		  {% assign video_id = video_id | split: '?' | last %}
+		  {% assign video_id = video_id | split: '=' | last %}
+		  {% if video_id != blank %}
+ 			{% assign thumbnail_url = 'http://img.youtube.com/vi/' | append: video_id | append: '/maxresdefault.jpg' %}
+		  {% endif %}
+        
+          <a href="#{{video_id}}">
+            <div class="videoimage"><img class="fix-width" src="{{thumbnail_url}}"/></div>
+            <h3 {%  unless block.settings.color_header contains '' %}style="color: {{block.settings.color_header}}"{%  endunless %}>{{block.settings.itemTitle}}</h3>
+            <p {%  unless block.settings.color_body contains '' %}style="color: {{block.settings.color_body}}"{%  endunless %}>{{block.settings.itemDescription}}</p>
+          </a>
+          {% comment %}
+            Youtube popup taken from here: https://codepen.io/imprakash/pen/GgNMXO
+          {% endcomment %}
+          <div id="{{ video_id }}" class="overlay">
+            <div class="popup_multi rte">
+                  <a class="fa-solid fa-circle-xmark close" onClick="stopVideo_{{ video_id | replace: '-', '_' }}();" href="#title"></a>
+            	  <iframe id="xxx{{ video_id }}xxx" width="912" height="513" src="https://tube.rvere.com/embed?v={{video_id}}&origin=http://www.eledlights.com&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+          <script>
+            function stopVideo_{{ video_id | replace: '-', '_' }}() {
+              document.getElementById("xxx{{ video_id }}xxx").src=document.getElementById("xxx{{ video_id }}xxx").src;
+            }
+          </script>
+        {% endunless %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<style>
+.videoimage:after {
+   background: transparent url({{ 'icon-play.svg' | asset_url }}) no-repeat center; 
+}
+</style>
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+{% schema %}
+{
+  "name": "Buyer's Guide",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Enter title",
+      "default": "Buyer's Guide"
+    },
+    {
+	  "type": "color",
+      "id": "titleColor",
+      "label": "Choose title color"
+	},
+    {
+      "type": "color",
+      "id": "sectionColor",
+      "label": "Section background color"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Content Block",
+      "type": "image",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Block Description/Name",
+          "default": "Content Block"
+        },
+		{
+		  "type": "url",
+		  "id": "contentLink",
+		  "label": "Link to the content"
+		},
+	    {
+		  "type": "image_picker",
+		  "id": "image",
+		  "label": "Thumbnail (Do not select if it is a youtube video)"
+		},
+		{
+		  "type": "text",
+		  "id": "itemTitle",
+		  "label": "Title for content"
+		},
+        {
+          "type": "color",
+          "id": "color_header",
+          "label": "Header text color"
+        },
+        {
+		  "type": "text",
+		  "id": "itemDescription",
+		  "label": "Description for content"
+		},
+        {
+          "type": "color",
+          "id": "color_body",
+          "label": "Body text color"
+        },
+		{
+          "type": "color",
+          "id": "color_background",
+          "label": "Block background color"
+        }
+	  ]
+	}
+  ],
+  "presets": [
+    {
+      "name": "Buyer's Guide",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  .videoimage {
+    position: relative;
+}
+.videoimage:after { 
+    content: ""; 
+    position: absolute; 
+    width: 75px; 
+    height: 60px; 
+    z-index: 1; 
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    margin: -20px;
+}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,533 @@
+<div style="background: {{ section.settings.sectionColor | escape }}" class="content-container container testimonials-container">
+    <h2 class="section__header heading h2" style="color: {{section.settings.titleColor | escape }}">
+        {{ section.settings.sectionTitle | escape }}
+    </h2>
+    {% assign blankWorkLoop = "" %}
+    <div class="content">
+        {% assign sectionColor = section.settings.sectionColor %}
+        {% assign bodyColor = section.settings.bodyColor %}
+        {% assign authorColor = section.settings.authorColor %}
+        {% assign projectColor = section.settings.projectColor %}
+
+        {% for block in section.blocks %}
+            {% assign blockType = block.type %}
+            {% comment %}
+                Initialize variables - keeps them clean during the loops
+            {% endcomment %}
+            {% assign lhideTextBlock = '' %}
+            {% assign columns = '' %}
+            {% assign lrating = 0 %}
+            {% assign ltestimonialAuthor = '' %}
+            {% assign ltestimonialProject = '' %}
+            {% assign ltestimonialDescription = '' %}
+            {% assign lblockColor = '' %}
+
+            {% assign rhideTextBlock = '' %}
+            {% assign rrating = 0 %}
+            {% assign rtestimonialAuthor = '' %}
+            {% assign rtestimonialProject = '' %}
+            {% assign rtestimonialDescription = '' %}
+            {% assign rblockColor = '' %}
+            {% assign rblockImage = '' %}
+            {% assign rblockLink = '' %}
+            {% assign rblockVideo = '' %}
+            {% assign directionSelect = '' %}
+            {% assign noPadding = '' %}
+            {% assign noGap = '' %}
+
+            {% comment %}
+                Set up variables for use in block
+            {% endcomment %}
+            {% if block.type == 'text' %}
+                {% if block.settings.ltestimonialDescription == null or block.settings.ltestimonialDescription == '' %} 
+                    {% assign lhideTextBlock = ' hide' %}
+                {% endif %}
+                {% if block.settings.rtestimonialDescription == null or block.settings.rtestimonialDescription == '' %}
+                    {% assign rhideTextBlock = ' hide' %}
+                {% endif %}
+                {% assign columns = ' ' | append: block.settings.columns %}
+                
+                {% assign lrating = block.settings.lrating | plus: 0 %}
+                {% assign ltestimonialAuthor = block.settings.ltestimonialAuthor %}
+                {% assign ltestimonialProject = block.settings.ltestimonialProject %}
+                {% assign ltestimonialDescription = block.settings.ltestimonialDescription %}
+                {% assign lblockColor = block.settings.lblockColor %}
+
+                {% assign rrating = block.settings.rrating | plus: 0 %}
+                {% assign rtestimonialAuthor = block.settings.rtestimonialAuthor %}
+                {% assign rtestimonialProject = block.settings.rtestimonialProject %}
+                {% assign rtestimonialDescription = block.settings.rtestimonialDescription %}
+                {% assign rblockColor = block.settings.rblockColor %}
+
+            {% else %}
+                {% assign directionSelect = ' ' | append: block.settings.directionSelect %}
+                {% assign lrating = block.settings.rating | plus: 0 %}
+                {% assign ltestimonialAuthor = block.settings.testimonialAuthor %}
+                {% assign ltestimonialProject = block.settings.testimonialProject %}
+                {% assign ltestimonialDescription = block.settings.testimonialDescription %}
+                {% assign lblockColor = block.settings.blockColor %}
+
+                {% assign rblockImage = block.settings.image %}
+                {% assign rblockLink = block.settings.contentLink %}
+                {% assign rblockVideo = block.settings.ytURL %}
+                {% assign noPadding = " nopadding" %}
+                {% assign noGap = " nogap" %}
+            {% endif %}
+
+            {% comment %}
+                Create block actual block
+            {% endcomment %}
+            <div class="testimonial-block{{ directionSelect }}{{ columns }}{{ noGap }}">
+                <div class="testimonial-left{{ lhideTextBlock }}"{% if lblockColor != '' %} style="background-color: {{ lblockColor }}"{% endif %}>
+                    <!--LEFT-->
+                    <div class="starrating">
+                        {% for i in (1..lrating) %}
+                            <span class="fa fa-star checked"></span>
+                        {% endfor %}
+                        {% if lrating < 5 and lrating > 0 and lrating != '' %}
+                            {% assign outStars = 5 | minus: lrating %}
+                            {% for i in (1..outStars) %}
+                                <span class="fa fa-star"></span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="description">{{ ltestimonialDescription }}</div>
+                    <div class="author">{{ ltestimonialAuthor }}</div>
+                    <div class="project">{{ ltestimonialProject }}</div>
+                </div>
+                <div class="testimonial-right{{ noPadding }}{{ rhideTextBlock }}"{% if rblockColor != '' %} style="background-color: {{ rblockColor }}"{% endif %}>
+                    <!--RIGHT-->
+                    {% if block.type == 'text' and rtestimonialDescription != '' %}
+                        <div class="starrating">
+                            {% for i in (1..rrating) %}
+                                <span class="fa fa-star checked"></span>
+                            {% endfor %}
+                            {% if rrating < 5 and rrating > 0 and rrating != '' %}
+                                {% assign outStars = 5 | minus: rrating %}
+                                {% for i in (1..outStars) %}
+                                    <span class="fa fa-star"></span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="description">{{ rtestimonialDescription }}</div>
+                        <div class="author">{{ rtestimonialAuthor }}</div>
+                        <div class="project">{{ rtestimonialProject }}</div>
+                    {% elsif block.type == 'image' and rblockLink != '' and rblockImage != '' %}
+                        <div>
+                            <a href="{{ rblockLink }}">
+                                {% if rblockImage != empty %}
+                                    <img src="{{ rblockImage | img_url: '754x360' }}" alt="Testimonial Image" />
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% elsif block.type == 'video' and rblockVideo != '' %}
+                        <div>
+                            {% comment %} 
+                                Code for getting youtube thumbnail by junaidkbr on github: https://gist.github.com/junaidkbr/79aaf8633f4e995d3bfda7f94ca3d94a
+                            {% endcomment %}
+                            {% assign video_url = rblockVideo %}
+                            {% assign thumbnail_url = '' %}
+                            {% assign video_id = video_url | split: '/' | last %}
+                            {% assign video_id = video_id | split: '?' | last %}
+                            {% assign video_id = video_id | split: '=' | last %}
+                            {% if video_id != blank %}
+     			                {% assign thumbnail_url = 'http://img.youtube.com/vi/' | append: video_id | append: '/maxresdefault.jpg' %}
+                                <a href="#{{video_id}}">
+                                    <div class="videoimage"><img src="{{- thumbnail_url -}}" loading="lazy" /></div>
+                                </a>
+                                <div id="{{ video_id }}" class="overlay">
+                                    <div class="popup_multi rte">
+                                        <a class="fa-solid fa-circle-xmark close" onClick="stopVideo_{{ video_id | replace: '-', '_' }}();" href="#title"></a>
+                                        <iframe id="xxx{{ video_id }}xxx" width="912" height="513" src="https://tube.rvere.com/embed?v={{- video_id -}}&origin=http://www.eledlights.com{{- block.settings.videoAttributes -}}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                <script>
+                                    function stopVideo_{{ video_id | replace: '-', '_' }}() {
+                                        document.getElementById("xxx{{ video_id }}xxx").src=document.getElementById("xxx{{ video_id }}xxx").src;
+                                    }
+                                </script>
+                            {% else %}
+                                <h3>BAD VIDEO URL</h3>
+                                <div>Pleae check and fix it
+    		                {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<style>
+.testimonial-block .description {
+    color:  {{ bodyColor }};
+}
+.testimonial-block .author {
+    color:  {{ authorColor }};
+}
+.testimonial-block .project {
+    color:  {{ projectColor }};
+}
+.videoimage:after { 
+    background: transparent url({{ 'icon-play.svg' | asset_url }}) no-repeat center; 
+}
+
+</style>
+{% schema %}
+{
+    "name": "Testimonials Section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "sectionTitle",
+            "label": "Section Title",
+            "default": "Testimonials"
+        },
+        {
+            "type": "color",
+            "id": "titleColor",
+            "label": "Title Text Color",
+            "default": "#1372B9"
+        },
+        {
+            "type": "color",
+            "id": "sectionColor",
+            "label": "Section Background Color",
+            "default": "#FFFFFF"
+        },
+        {
+            "type": "color",
+            "id": "bodyColor",
+            "label": "Textimonial Text Color",
+            "default": "#000000"
+        },
+        {
+            "type": "color",
+            "id": "authorColor",
+            "label": "Author Text Color",
+            "default": "#000000"
+        },
+        {
+            "type": "color",
+            "id": "projectColor",
+            "label": "Project Text Color",
+            "default": "#000000"
+        }
+    ],
+    "blocks": [
+        {
+            "name": "Text Only Block",
+            "type": "text",
+            "settings": [
+                {
+                  "type": "text",
+                  "id": "title",
+                  "label": "Block Description/Name",
+                  "default": "Text Only Block"
+                },
+                {
+                    "type": "select",
+                    "id": "columns",
+                    "label": "Single Testimonial Width",
+                    "options": [
+                        {
+                        "value": "twocolumn",
+                        "label": "Half Width"
+                        },
+                        {
+                        "value": "onecolumn",
+                        "label": "Full Width"
+                        }
+                    ],
+                    "default": "twocolumn"
+                },
+                {
+                "type": "header",
+                "content": "Left Testimonial"
+                },
+                {
+                    "type": "text",
+                    "id": "lrating",
+                    "label": "Left: Rating (out of 5)",
+                    "default": "5"
+                },
+                {
+                    "type": "text",
+                    "id":"ltestimonialAuthor",
+                    "label": "Left: Author"
+                },
+                {
+                    "type": "text",
+                    "id": "ltestimonialProject",
+                    "label": "Left: Project"
+                },
+                {
+                    "type": "textarea",
+                    "id": "ltestimonialDescription",
+                    "label": "Left: Review (no Testimonial if empty)"
+                },
+                {
+                    "type": "color",
+                    "id": "lblockColor",
+                    "label": "Left: Background Color",
+                    "default": "#FAFAFA"
+                },
+                {
+                "type": "header",
+                "content": "Right Testimonial"
+                },
+                {
+                    "type": "text",
+                    "id": "rrating",
+                    "label": "Right: Rating (out of 5)",
+                    "default": "5"
+                },
+                {
+                    "type": "text",
+                    "id":"rtestimonialAuthor",
+                    "label": "Right: Author"
+                },
+                {
+                    "type": "text",
+                    "id": "rtestimonialProject",
+                    "label": "Right: Project"
+                },
+                {
+                    "type": "textarea",
+                    "id": "rtestimonialDescription",
+                    "label": "Right: Review (no Testimonial if empty)"
+                },
+                {
+                    "type": "color",
+                    "id": "rblockColor",
+                    "label": "Right: Background Color",
+                    "default": "#FAFAFA"
+                }
+            ]
+        },
+        {
+            "name": "Text & Image",
+            "type": "image",
+            "settings": [
+                {
+                  "type": "text",
+                  "id": "title",
+                  "label": "Block Description/Name",
+                  "default": "Text & Image"
+                },
+                {
+                    "type": "select",
+                    "id": "directionSelect",
+                    "label": "Flow Direction",
+                    "options": [
+                        {
+                            "value": "directionLR",
+                            "label": "Content -- Image"
+                        },
+                        {
+                            "value": "directionRL",
+                            "label": "Image -- Content"
+                        }
+                    ],
+                    "default": "directionLR"
+                },
+                {
+                    "type": "text",
+                    "id": "rating",
+                    "label": "Rating (out of 5)",
+                    "default": "5"
+                },
+                {
+                    "type": "text",
+                    "id":"testimonialAuthor",
+                    "label": "Author"
+                },
+                {
+                    "type": "text",
+                    "id": "testimonialProject",
+                    "label": "Project"
+                },
+                {
+                    "type": "textarea",
+                    "id": "testimonialDescription",
+                    "label": "Review"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                },
+                {
+                    "type": "url",
+                    "id": "contentLink",
+                    "label": "Link to Content Page"
+                },
+                {
+                    "type": "color",
+                    "id": "blockColor",
+                    "label": "Background Color",
+                    "default": "#FAFAFA"
+                }
+            ]
+        },
+        {
+            "name": "Text & Video",
+            "type": "video",
+            "settings": [
+                {
+                  "type": "text",
+                  "id": "title",
+                  "label": "Block Description/Name",
+                  "default": "Text & Video"
+                },
+                {
+                    "type": "select",
+                    "id": "directionSelect",
+                    "label": "Flow Direction",
+                    "options": [
+                        {
+                        "value": "directionLR",
+                        "label": "Content -- Video Image"
+                        },
+                        {
+                        "value": "directionRL",
+                        "label": "Video Image -- Content"
+                        }
+                    ],
+                    "default": "directionLR"
+                },
+                {
+                    "type": "text",
+                    "id": "rating",
+                    "label": "Rating (out of 5)",
+                    "default": "5"
+                },
+                {
+                    "type": "text",
+                    "id":"testimonialAuthor",
+                    "label": "Author"
+                },
+                {
+                    "type": "text",
+                    "id": "testimonialProject",
+                    "label": "Project"
+                },
+                {
+                    "type": "textarea",
+                    "id": "testimonialDescription",
+                    "label": "Review"
+                },
+                {
+                    "type": "url",
+                    "id": "ytURL",
+                    "label": "YouTube URL"
+                },
+                {
+                    "type": "text",
+                    "id": "videoAttributes",
+                    "label": "Video Attributes",
+                    "default": "&rel=0"
+                },
+                {
+                    "type": "color",
+                    "id": "blockColor",
+                    "label": "Background Color",
+                    "default": "#FAFAFA"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+        "name": "Testimonials Section",
+        "category": "Custom"
+        }
+    ]
+}
+{% endschema %}
+
+
+
+{% stylesheet %}
+.testimonials-container {
+    max-width: 1550px;
+}
+iframe {
+    border: none;
+}
+.starrating .fa-star {
+    color: lightgrey;
+}
+.starrating .fa-star.checked {
+    color: orange;
+}
+.testimonial-block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    justify-content: center;
+    margin: -1px;
+    gap: 15px;
+}
+.testimonial-block.nogap {
+  gap: 0;
+}
+.testimonial-block>div {
+    padding: 20px 30px;
+    text-align: center;
+    flex: 1 1 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 40px;
+    min-height: 420px;
+}
+.testimonial-block>div.nopadding {
+    padding: 0;
+}
+.testimonial-block.directionRL {
+    flex-direction: row-reverse;
+}
+  .testimonial-block .hide {
+    display: none;
+}
+.onecolumn {
+    max-width: 100%;
+}
+.onecolumn .testimonial-left, .onecolumn .testimonial-right {
+    width: 100%;
+}
+.testimonial-block .description {
+    text-align: left;
+    font-size: 14px;
+    margin-top: 20px;
+}
+.testimonial-block .author {
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 30px;
+}
+.testimonial-block .project {
+    font-size: 13px;
+}
+.videoimage {
+    position: relative;
+}
+.videoimage:after { 
+    content: ""; 
+    position: absolute; 
+    width: 75px; 
+    height: 60px; 
+    z-index: 1; 
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    margin: -20px;
+}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

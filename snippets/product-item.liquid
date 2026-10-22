@@ -102,28 +102,28 @@
     {%- if rebatelabel != blank -%}
       {{ rebatelabel }}
     {%- endif -%}
-      <img class="product-item__primary-image" loading="lazy" data-media-id="{{ product.featured_media.id | escape }}" sizes="{{ sizes_attribute }}" {% if is_small_img != true %}{% render 'image-attributes', image: product.featured_media, sizes: '200,300,400' | strip_newlines %}> {% else  %}{% render 'image-attributes', image: product.featured_media, sizes: '200' | strip_newlines %}>{% endif %}
+      <img class="product-item__primary-image" loading="lazy" data-media-id="{{ product.featured_media.id | escape }}" sizes="{{ sizes_attribute }}" {% if is_small_img != true %}{% render 'image-attributes', image: product.featured_media, sizes: '200,300,400' %}> {% else  %}{% render 'image-attributes', image: product.featured_media, sizes: '200' %}>{% endif %}
     
       {%- if settings.product_color_display == 'swatch' -%}
         {%- assign featured_media = product.variants | map: 'featured_media' -%}
     
         {%- for media in featured_media -%}
           {%- unless media == product.featured_media -%}
-            <img class="product-item__primary-image" hidden data-media-id="{{ media.id | escape }}" loading="lazy" sizes="{{ sizes_attribute }}" {% if is_small_img != true %}{% render 'image-attributes', image: media, sizes: '200,300,400' | strip_newlines %}> {% else  %}{% render 'image-attributes', image: media, sizes: '200' | strip_newlines %}>{% endif %}
+            <img class="product-item__primary-image" hidden data-media-id="{{ media.id | escape }}" loading="lazy" sizes="{{ sizes_attribute }}" {% if is_small_img != true %}{% render 'image-attributes', image: media, sizes: '200,300,400' %}> {% else  %}{% render 'image-attributes', image: media, sizes: '200' %}>{% endif %}
           {%- endunless -%}
         {%- endfor -%}
       {%- endif -%}
     
       {%- if settings.show_secondary_image and product.media.size > 1 and hide_secondary_image != true -%}
-        <img class="product-item__secondary-image" loading="lazy" sizes="{{ sizes_attribute }}" {% if is_small_img != true %}{% render 'image-attributes', image: product.media[1], sizes: '200,300,400' | strip_newlines %}> {% else  %}{% render 'image-attributes', image: product.media[1], sizes: '200' | strip_newlines %}>{% endif %}
+        <img class="product-item__secondary-image" loading="lazy" sizes="{{ sizes_attribute }}" {% if is_small_img != true %}{% render 'image-attributes', image: product.media[1], sizes: '200,300,400' %}> {% else  %}{% render 'image-attributes', image: product.media[1], sizes: '200' %}>{% endif %}
       {%- endif -%}
     </a>
     {%  if minimum_content == true %}
     {%  else %}
     {%- comment -%} Zoe edit PRODUCT LABEL/BADGE LOCATIONS ON IMAGE: Groups 1 & 3 - 1 is bottom right & 3 is top right{%- endcomment -%}
 
-    {% render 'primeb', product: product, hideAssets:'1', primebGroup: '1', primebOuterClass:'prime-d-inline-block', primebOuterStyle:'position: absolute; left: 0; bottom: 0; padding: 8px; z-index: 0;', primebInnerStyle:'', primebInnerClass: 'prime-d-inline-block prime-mr-1' | strip_newlines %}
-    {% render 'primeb', product: product, hideAssets:'1', primebGroup: '3', primebOuterClass:'prime-d-inline-block', primebOuterStyle:'position: absolute; right: 0; top: 0; z-index: 0;', primebInnerStyle:'', primebInnerClass: 'prime-d-inline-block prime-mr-1 prime-mb-1' | strip_newlines %}
+    {% render 'primeb', product: product, hideAssets: '1', primebGroup: '1', primebOuterClass: 'prime-d-inline-block', primebOuterStyle: 'position: absolute; left: 0; bottom: 0; padding: 8px; z-index: 0;', primebInnerStyle: '', primebInnerClass: 'prime-d-inline-block prime-mr-1' %}
+    {% render 'primeb', product: product, hideAssets: '1', primebGroup: '3', primebOuterClass: 'prime-d-inline-block', primebOuterStyle: 'position: absolute; right: 0; top: 0; z-index: 0;', primebInnerStyle: '', primebInnerClass: 'prime-d-inline-block prime-mr-1 prime-mb-1' %}
 
     {% endif %}
     {%- if request.page_type != 'password' and settings.product_add_to_cart and product.available and reduced_content != true and show_cta != true -%}
@@ -138,7 +138,7 @@
           <button is="loader-button" type="submit" class="button button--outline button--text button--full {% if section.settings.desktop_products_per_row >= 5 %}button--small{% endif %} hidden-touch">{{ 'collection.product.add_to_cart_short' | t }}</button>
           <button type="submit" class="product-item__quick-buy-button hidden-no-touch">
             <span class="visually-hidden">{{ 'collection.product.add_to_cart_short' | t }}</span>
-            {%- render 'icon' with quick_buy_icon_name | strip_newlines -%}
+            {%- render 'icon' with quick_buy_icon_name -%}
           </button>
         {%- endform -%}
       {%- else -%}
@@ -150,12 +150,12 @@
           <button is="toggle-button" loader aria-controls="product-{{ section.id }}-{{ block.id }}-{{ product.id }}-drawer" aria-expanded="false" class="button button--outline button--text button--full {% if section.settings.desktop_products_per_row >= 5 %}button--small{% endif %} hidden-touch hidden-phone">{{ 'collection.product.quick_view' | t }}</button>
           <button is="toggle-button" aria-controls="product-{{ section.id }}-{{ block.id }}-{{ product.id }}-drawer" aria-expanded="false" class="product-item__quick-buy-button hidden-no-touch hidden-phone">
             <span class="visually-hidden">{{ 'collection.product.quick_view' | t }}</span>
-            {%- render 'icon' with quick_buy_icon_name | strip_newlines -%}
+            {%- render 'icon' with quick_buy_icon_name -%}
           </button>
 
           <button is="toggle-button" aria-controls="product-{{ section.id }}-{{ block.id }}-{{ product.id }}-popover" aria-expanded="false" class="product-item__quick-buy-button hidden-tablet-and-up">
             <span class="visually-hidden">{{ 'collection.product.quick_view' | t }}</span>
-            {%- render 'icon' with quick_buy_icon_name | strip_newlines -%}
+            {%- render 'icon' with quick_buy_icon_name -%}
           </button>
         </div>
 
@@ -600,7 +600,7 @@
 
       {%- if settings.show_product_rating and reduced_content != true -%}
         <a class="product-item-meta__reviews-badge text--small" href="{{ product.url | within: collection }}">
-          {%- render 'product-rating', product: product | strip_newlines -%}
+          {%- render 'product-rating', product: product -%}
         </a>
       {%- endif -%}
 
@@ -627,7 +627,7 @@
 
                     <div class="color-swatch {% if color_white_label == color_value_downcase %}color-swatch--white{% endif %}">
                       <input class="color-swatch__radio visually-hidden" type="radio" name="{{ color_name }}" id="{{ color_id }}" value="{{ value | escape }}" {% if product_option.selected_value == value %}checked="checked"{% endif %} data-variant-id="{{ variant_for_value.id }}" {% if variant_for_value.featured_media %}data-variant-featured-media="{{ variant_for_value.featured_media.id }}"{% endif %}>
-                      <label class="color-swatch__item" for="{{ color_id }}" style="{% render 'color-swatch-style', color_swatch_config: color_swatch_config, value: value | strip_newlines %}">
+                      <label class="color-swatch__item" for="{{ color_id }}" style="{% render 'color-swatch-style', color_swatch_config: color_swatch_config, value: value %}">
                         <span class="visually-hidden">{{ value }}</span>
                       </label>
                     </div>
@@ -674,8 +674,82 @@
 {% endcomment %}
     
     {%- comment -%}Group 2 is for the badges below the title on the collections page {%- endcomment -%}
-    {% render 'primeb', product: product, hideAssets:'1', primebGroup:'2', primebOuterClass:'prime-d-inline-block prime-mr-1', primebOuterStyle:'display: inline-block !important', primebInnerStyle:'', primebInnerClass: 'prime-d-inline-block prime-mb-1' | strip_newlines %}
+    {% render 'primeb', product: product, hideAssets: '1', primebGroup: '2', primebOuterClass: 'prime-d-inline-block prime-mr-1', primebOuterStyle: 'display: inline-block !important', primebInnerStyle: '', primebInnerClass: 'prime-d-inline-block prime-mb-1' %}
     
   </div>
   	
-  </product-item>
+  </product-item>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'image-attributes', image: product.featured_media, sizes: '200,300,400'
+    | strip_newlines %}"
+  to: "{% render 'image-attributes', image: product.featured_media, sizes: '200,300,400'
+    %}"
+  position: 7123..7207
+- from: "{% render 'image-attributes', image: product.featured_media, sizes: '200'
+    | strip_newlines %}"
+  to: "{% render 'image-attributes', image: product.featured_media, sizes: '200' %}"
+  position: 7220..7296
+- from: "{% render 'image-attributes', image: media, sizes: '200,300,400' | strip_newlines
+    %}"
+  to: "{% render 'image-attributes', image: media, sizes: '200,300,400' %}"
+  position: 7735..7802
+- from: "{% render 'image-attributes', image: media, sizes: '200' | strip_newlines
+    %}"
+  to: "{% render 'image-attributes', image: media, sizes: '200' %}"
+  position: 7815..7874
+- from: "{% render 'image-attributes', image: product.media[1], sizes: '200,300,400'
+    | strip_newlines %}"
+  to: "{% render 'image-attributes', image: product.media[1], sizes: '200,300,400'
+    %}"
+  position: 8195..8273
+- from: "{% render 'image-attributes', image: product.media[1], sizes: '200' | strip_newlines
+    %}"
+  to: "{% render 'image-attributes', image: product.media[1], sizes: '200' %}"
+  position: 8286..8356
+- from: "{% render 'primeb', product: product, hideAssets:'1', primebGroup: '1', primebOuterClass:'prime-d-inline-block',
+    primebOuterStyle:'position: absolute; left: 0; bottom: 0; padding: 8px; z-index:
+    0;', primebInnerStyle:'', primebInnerClass: 'prime-d-inline-block prime-mr-1'
+    | strip_newlines %}"
+  to: "{% render 'primeb', product: product, hideAssets: '1', primebGroup: '1', primebOuterClass:
+    'prime-d-inline-block', primebOuterStyle: 'position: absolute; left: 0; bottom:
+    0; padding: 8px; z-index: 0;', primebInnerStyle: '', primebInnerClass: 'prime-d-inline-block
+    prime-mr-1' %}"
+  position: 8594..8872
+- from: "{% render 'primeb', product: product, hideAssets:'1', primebGroup: '3', primebOuterClass:'prime-d-inline-block',
+    primebOuterStyle:'position: absolute; right: 0; top: 0; z-index: 0;', primebInnerStyle:'',
+    primebInnerClass: 'prime-d-inline-block prime-mr-1 prime-mb-1' | strip_newlines
+    %}"
+  to: "{% render 'primeb', product: product, hideAssets: '1', primebGroup: '3', primebOuterClass:
+    'prime-d-inline-block', primebOuterStyle: 'position: absolute; right: 0; top:
+    0; z-index: 0;', primebInnerStyle: '', primebInnerClass: 'prime-d-inline-block
+    prime-mr-1 prime-mb-1' %}"
+  position: 8877..9150
+- from: "{%- render 'icon' with quick_buy_icon_name | strip_newlines -%}"
+  to: "{%- render 'icon' with quick_buy_icon_name -%}"
+  position: 10357..10403
+- from: "{%- render 'icon' with quick_buy_icon_name | strip_newlines -%}"
+  to: "{%- render 'icon' with quick_buy_icon_name -%}"
+  position: 11367..11413
+- from: "{%- render 'icon' with quick_buy_icon_name | strip_newlines -%}"
+  to: "{%- render 'icon' with quick_buy_icon_name -%}"
+  position: 11739..11785
+- from: "{%- render 'product-rating', product: product | strip_newlines -%}"
+  to: "{%- render 'product-rating', product: product -%}"
+  position: 35111..35160
+- from: "{% render 'color-swatch-style', color_swatch_config: color_swatch_config,
+    value: value | strip_newlines %}"
+  to: "{% render 'color-swatch-style', color_swatch_config: color_swatch_config, value:
+    value %}"
+  position: 37180..37269
+- from: "{% render 'primeb', product: product, hideAssets:'1', primebGroup:'2', primebOuterClass:'prime-d-inline-block
+    prime-mr-1', primebOuterStyle:'display: inline-block !important', primebInnerStyle:'',
+    primebInnerClass: 'prime-d-inline-block prime-mb-1' | strip_newlines %}"
+  to: "{% render 'primeb', product: product, hideAssets: '1', primebGroup: '2', primebOuterClass:
+    'prime-d-inline-block prime-mr-1', primebOuterStyle: 'display: inline-block !important',
+    primebInnerStyle: '', primebInnerClass: 'prime-d-inline-block prime-mb-1' %}"
+  position: 40465..40721
+{%- endcomment -%}

@@ -74,11 +74,11 @@ g.async=true; g.src='https://cdn.matomo.cloud/eledlights.matomo.cloud/container_
       <link rel="preload" as="image" media="(max-width: 740px)" imagesizes="100vw" imagesrcset="{%- render 'image-attributes', image: collection.image, sizes: '400,500,600,700,800,900,1000', height_constraint: 600, crop: 'center', sizes_only: true -%}">
       <link rel="preload" as="image" media="(min-width: 741px)" imagesizes="100vw" imagesrcset="{%- render 'image-attributes', image: collection.image, sizes: '600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600', sizes_only: true -%}">
     {%- endif -%}
-    {%- render 'preload-banners' | strip_newlines -%}
-    {%- render 'social-meta-tags' | strip_newlines -%}
-    {%- render 'microdata-schema' | strip_newlines -%}
-    {%- render 'css-variables', direction: direction | strip_newlines -%}
-    {%- render 'js-variables', direction: direction | strip_newlines -%}
+    {%- render 'preload-banners' -%}
+    {%- render 'social-meta-tags' -%}
+    {%- render 'microdata-schema' -%}
+    {%- render 'css-variables', direction: direction -%}
+    {%- render 'js-variables', direction: direction -%}
     {%- comment -%}Preload important resources{%- endcomment -%}
 
     {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
@@ -200,4 +200,25 @@ window.LOQ.push(['ready', async LO => {
   <body class="no-focus-outline {{ feature_classes }}" data-instant-allow-query-string><div class="pagefly-container">
               {{ content_for_layout }}
             </div></body>
-</html>
+</html>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'preload-banners' | strip_newlines -%}"
+  to: "{%- render 'preload-banners' -%}"
+  position: 4660..4692
+- from: "{%- render 'social-meta-tags' | strip_newlines -%}"
+  to: "{%- render 'social-meta-tags' -%}"
+  position: 4697..4730
+- from: "{%- render 'microdata-schema' | strip_newlines -%}"
+  to: "{%- render 'microdata-schema' -%}"
+  position: 4735..4768
+- from: "{%- render 'css-variables', direction: direction | strip_newlines -%}"
+  to: "{%- render 'css-variables', direction: direction -%}"
+  position: 4773..4825
+- from: "{%- render 'js-variables', direction: direction | strip_newlines -%}"
+  to: "{%- render 'js-variables', direction: direction -%}"
+  position: 4830..4881
+{%- endcomment -%}

@@ -64,12 +64,12 @@
         <div class="tabs-nav__arrows">
           <button class="tabs-nav__arrow-item">
             <span class="visually-hidden">{{ 'general.accessibility.previous' | t }}</span>
-            {%- render 'icon' with 'product-tab-left', direction_aware: true | strip_newlines -%}
+            {%- render 'icon' with 'product-tab-left', direction_aware: true -%}
           </button>
 
           <button class="tabs-nav__arrow-item">
             <span class="visually-hidden">{{ 'general.accessibility.next' | t }}</span>
-            {%- render 'icon' with 'product-tab-right', direction_aware: true | strip_newlines -%}
+            {%- render 'icon' with 'product-tab-right', direction_aware: true -%}
           </button>
         </div>
       </tabs-nav>
@@ -92,7 +92,7 @@
               {%- if custom_icon != blank -%}
                 <img class="product-tabs__trust-icon" loading="lazy" sizes="24px" {%- render 'image-attributes', image: custom_icon, sizes: '24,48,72,96' -%}>
               {%- else -%}
-                {%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon' | strip_newlines -%}
+                {%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon' -%}
               {%- endif -%}
             {%- endcapture -%}
 
@@ -127,7 +127,7 @@
               {%- if custom_icon != blank -%}
                 <img class="product-tabs__trust-icon" loading="lazy" sizes="24px" {% render 'image-attributes', image: custom_image, sizes: '24,48,72,96' %}>
               {%- else -%}
-                {%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon' | strip_newlines -%}
+                {%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon' -%}
               {%- endif -%}
             {%- endcapture -%}
 
@@ -139,7 +139,7 @@
                 <p class="drawer__title heading h6">{{- trust_icon -}} {{- trust_block.settings[title_setting] | escape -}}</p>
 
                 <button type="button" class="drawer__close-button tap-area" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
-                  {%- render 'icon' with 'close' | strip_newlines -%}
+                  {%- render 'icon' with 'close' -%}
                 </button>
               </header>
 
@@ -158,7 +158,7 @@
                 <p class="popover__title heading h6">{{- trust_icon -}} {{- trust_block.settings[title_setting] | escape -}}</p>
 
                 <button type="button" class="popover__close-button tap-area tap-area--large" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
-                  {%- render 'icon' with 'close' | strip_newlines -%}
+                  {%- render 'icon' with 'close' -%}
                 </button>
               </header>
 
@@ -184,7 +184,7 @@
                 <div {% unless processed_blocks == 0 %}hidden{% endunless %} id="block-{{ section.id }}-{{ block.id }}" class="product-tabs__tab-item-wrapper">
                   <button is="toggle-button" class="collapsible-toggle heading heading--small hidden-lap-and-up" aria-controls="block-{{ section.id }}-{{ block.id }}-content" aria-expanded="{% if processed_blocks == 0 %}true{% else %}false{% endif %}">
                     {{- 'product.general.description' | t -}}
-                    {%- render 'icon' with 'chevron' | strip_newlines -%}
+                    {%- render 'icon' with 'chevron' -%}
                   </button>
 
                   <collapsible-content {% if processed_blocks == 0 %}open{% endif %} id="block-{{ section.id }}-{{ block.id }}-content" class="collapsible">
@@ -234,7 +234,7 @@
               <div {% unless processed_blocks == 0 %}hidden{% endunless %} id="block-{{ section.id }}-{{ block.id }}" class="product-tabs__tab-item-wrapper" {{ block.shopify_attributes }}>
                 <button is="toggle-button" class="collapsible-toggle heading heading--small hidden-lap-and-up" aria-expanded="{% if processed_blocks == 0 %}true{% else %}false{% endif %}" aria-controls="block-{{ section.id }}-{{ block.id }}-content">
                   {{- title -}}
-                  {%- render 'icon' with 'chevron' | strip_newlines -%}
+                  {%- render 'icon' with 'chevron' -%}
                 </button>
 
                 <collapsible-content {% if processed_blocks == 0 %}open{% endif %} id="block-{{ section.id }}-{{ block.id }}-content" class="collapsible">
@@ -258,7 +258,7 @@
               <div {% unless processed_blocks == 0 %}hidden{% endunless %} id="block-{{ section.id }}-{{ block.id }}" class="product-tabs__tab-item-wrapper" {{ block.shopify_attributes }}>
                 <button is="toggle-button" class="collapsible-toggle heading heading--small hidden-lap-and-up" aria-expanded="{% if processed_blocks == 0 %}true{% else %}false{% endif %}" aria-controls="block-{{ section.id }}-{{ block.id }}-content">
                   {{- block.settings.title | escape -}}
-                  {%- render 'icon' with 'chevron' | strip_newlines -%}
+                  {%- render 'icon' with 'chevron' -%}
                 </button>
 
                 <collapsible-content {% if processed_blocks == 0 %}open{% endif %} id="block-{{ section.id }}-{{ block.id }}-content" class="collapsible">
@@ -341,7 +341,7 @@
   {%- endif -%}
 {% endcomment %}
     {% comment %}START Upsell Products - read from global data created in ELED Apps Upsells{% endcomment %}
-    {%- capture upsellProducts | strip_newlines -%}
+    {%- capture upsellProducts -%}
         {%- assign upsell_products_block = section.blocks | where: 'type', 'upsell_products' | first -%}
         {% if upsell_products_block != blank %}
             {% assign upsell_got = false %}
@@ -366,8 +366,8 @@
                         <div class="scroller__inner">
                             <div class="product-content__featured-products-list">
                                 {%- if upsell_products[0] != blank -%}
-                                    {%- capture item_cap | strip_newlines -%}
-                                        {%- render 'product-item', product: all_products[upsell_products[0]], reduced_content: true, minimum_content: true, reduced_font_size: true, is_small_img: true, sizes_attribute: '(max-width: 740px) 105px, 215px' | strip_newlines -%}
+                                    {%- capture item_cap -%}
+                                        {%- render 'product-item', product: all_products[upsell_products[0]], reduced_content: true, minimum_content: true, reduced_font_size: true, is_small_img: true, sizes_attribute: '(max-width: 740px) 105px, 215px' -%}
                                     {%- endcapture -%}
                                     {% if item_cap contains "no-image-" or item_cap contains "Sold Out" %}
                                     {% else %}
@@ -376,8 +376,8 @@
                                 {%- endif -%}
 
                                 {%- if upsell_products[1] != blank -%}
-                                    {%- capture item_cap | strip_newlines -%}
-                                        {%- render 'product-item', product: all_products[upsell_products[1]], reduced_content: true, minimum_content: true, reduced_font_size: true, sizes_attribute: '(max-width: 740px) 105px, 215px' | strip_newlines -%}
+                                    {%- capture item_cap -%}
+                                        {%- render 'product-item', product: all_products[upsell_products[1]], reduced_content: true, minimum_content: true, reduced_font_size: true, sizes_attribute: '(max-width: 740px) 105px, 215px' -%}
                                     {%- endcapture -%}
                                     {% if item_cap contains "no-image-" or item_cap contains "Sold Out" %}
                                     {% else %}
@@ -1049,4 +1049,66 @@
     }
   ]
 }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'icon' with 'product-tab-left', direction_aware: true | strip_newlines
+    -%}"
+  to: "{%- render 'icon' with 'product-tab-left', direction_aware: true -%}"
+  position: 3388..3456
+- from: "{%- render 'icon' with 'product-tab-right', direction_aware: true | strip_newlines
+    -%}"
+  to: "{%- render 'icon' with 'product-tab-right', direction_aware: true -%}"
+  position: 3626..3695
+- from: "{%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon'
+    | strip_newlines -%}"
+  to: "{%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon'
+    -%}"
+  position: 4688..4784
+- from: "{%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon'
+    | strip_newlines -%}"
+  to: "{%- render 'icon' with trust_block.settings[icon_setting], class: 'product-tabs__trust-icon'
+    -%}"
+  position: 6793..6889
+- from: "{%- render 'icon' with 'close' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'close' -%}"
+  position: 7583..7617
+- from: "{%- render 'icon' with 'close' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'close' -%}"
+  position: 8555..8589
+- from: "{%- render 'icon' with 'chevron' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'chevron' -%}"
+  position: 9750..9786
+- from: "{%- render 'icon' with 'chevron' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'chevron' -%}"
+  position: 12842..12878
+- from: "{%- render 'icon' with 'chevron' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'chevron' -%}"
+  position: 14241..14277
+- from: "{%- capture upsellProducts | strip_newlines -%}"
+  to: "{%- capture upsellProducts -%}"
+  position: 17924..17954
+- from: "{%- capture item_cap | strip_newlines -%}"
+  to: "{%- capture item_cap -%}"
+  position: 19433..19457
+- from: "{%- render 'product-item', product: all_products[upsell_products[0]], reduced_content:
+    true, minimum_content: true, reduced_font_size: true, is_small_img: true, sizes_attribute:
+    '(max-width: 740px) 105px, 215px' | strip_newlines -%}"
+  to: "{%- render 'product-item', product: all_products[upsell_products[0]], reduced_content:
+    true, minimum_content: true, reduced_font_size: true, is_small_img: true, sizes_attribute:
+    '(max-width: 740px) 105px, 215px' -%}"
+  position: 19498..19713
+- from: "{%- capture item_cap | strip_newlines -%}"
+  to: "{%- capture item_cap -%}"
+  position: 20182..20206
+- from: "{%- render 'product-item', product: all_products[upsell_products[1]], reduced_content:
+    true, minimum_content: true, reduced_font_size: true, sizes_attribute: '(max-width:
+    740px) 105px, 215px' | strip_newlines -%}"
+  to: "{%- render 'product-item', product: all_products[upsell_products[1]], reduced_content:
+    true, minimum_content: true, reduced_font_size: true, sizes_attribute: '(max-width:
+    740px) 105px, 215px' -%}"
+  position: 20247..20442
+{%- endcomment -%}

@@ -313,7 +313,7 @@
           {%  endif %}</div>
       {% endcase %}
     {% endif %}
-    {%- render 'rebatesearch', product: product | strip_newlines -%}
+    {%- render 'rebatesearch', product: product -%}
     {%- if section.settings.show_taxes_included -%}
       {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
         <p class="product-meta__taxes-included text--small">
@@ -346,8 +346,8 @@
     {%- if section.settings.show_product_rating or section.settings.show_sku -%}
       <div class="product-meta__reference">
         {%- if section.settings.show_product_rating -%}
-          <a href="{% if featured %}{{ product.url }}{% endif %}#product-{{ product.id }}-reviews-pocket" is="review-link" data-smooth-scroll class="product-meta__reviews-badge hidden-lap-and-up">{%- render 'product-rating', product: product | strip_newlines -%}</a>
-          <a href="{% if featured %}{{ product.url }}{% endif %}#product-{{ product.id }}-tabs" is="review-link" data-smooth-scroll class="product-meta__reviews-badge hidden-pocket">{%- render 'product-rating', product: product | strip_newlines -%}</a>
+          <a href="{% if featured %}{{ product.url }}{% endif %}#product-{{ product.id }}-reviews-pocket" is="review-link" data-smooth-scroll class="product-meta__reviews-badge hidden-lap-and-up">{%- render 'product-rating', product: product -%}</a>
+          <a href="{% if featured %}{{ product.url }}{% endif %}#product-{{ product.id }}-tabs" is="review-link" data-smooth-scroll class="product-meta__reviews-badge hidden-pocket">{%- render 'product-rating', product: product -%}</a>
         {%- endif -%}
 
         {%- if section.settings.show_sku -%}
@@ -383,7 +383,7 @@
     
      
   </product-meta>
-  {%- render 'product-form', product: product, update_url: update_url | strip_newlines -%}
+  {%- render 'product-form', product: product, update_url: update_url -%}
 
   {%- assign help_page = section.settings.help_page -%}
   {%- if section.settings.show_share_buttons or help_page != blank -%}
@@ -405,43 +405,43 @@
               <span class="popover__title heading h6">{{- 'article.general.share' | t -}}</span>
 
               <button type="button" class="popover__close-button tap-area tap-area--large" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
-                {%- render 'icon' with 'close' | strip_newlines -%}
+                {%- render 'icon' with 'close' -%}
               </button>
             </header>
             <div class="mobile-share-buttons">
               <a class="mobile-share-buttons__item mobile-share-buttons__item--facebook" href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}">
-                {%- render 'icon' with 'facebook-share-mobile' | strip_newlines -%} Facebook
+                {%- render 'icon' with 'facebook-share-mobile' -%} Facebook
               </a>
 
               <a class="mobile-share-buttons__item mobile-share-buttons__item--pinterest" href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.pinterest_pin' | t }}">
-                {%- render 'icon' with 'pinterest-share-mobile' | strip_newlines -%} Pinterest
+                {%- render 'icon' with 'pinterest-share-mobile' -%} Pinterest
               </a>
 
               <a class="mobile-share-buttons__item mobile-share-buttons__item--twitter" href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">
-                {%- render 'icon' with 'twitter-share-mobile' | strip_newlines -%} Twitter
+                {%- render 'icon' with 'twitter-share-mobile' -%} Twitter
               </a>
 
               <a class="mobile-share-buttons__item mobile-share-buttons__item--mail" href="mailto:?&subject={{ article.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">
-                {%- render 'icon' with 'email-share-mobile' | strip_newlines -%} {{ 'general.social.email_label' | t }}
+                {%- render 'icon' with 'email-share-mobile' -%} {{ 'general.social.email_label' | t }}
               </a>
             </div>
           </popover-content>
 
           <div class="product-meta__share-button-list hidden-phone">
             <a class="product-meta__share-button-item product-meta__share-button-item--facebook link tap-area" href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}">
-              {%- render 'icon' with 'facebook', width: 8, height: 14 | strip_newlines -%}
+              {%- render 'icon' with 'facebook', width: 8, height: 14 -%}
             </a>
 
             <a class="product-meta__share-button-item product-meta__share-button-item--pinterest link tap-area" href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.pinterest_pin' | t }}">
-              {%- render 'icon' with 'pinterest', width: 10, height: 14 | strip_newlines -%}
+              {%- render 'icon' with 'pinterest', width: 10, height: 14 -%}
             </a>
 
             <a class="product-meta__share-button-item product-meta__share-button-item--twitter link tap-area" href="https://twitter.com/share?{% if twitter_text != blank %}text={{ twitter_text }}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">
-              {%- render 'icon' with 'twitter', width: 17, height: 14 | strip_newlines -%}
+              {%- render 'icon' with 'twitter', width: 17, height: 14 -%}
             </a>
 
             <a class="product-meta__share-button-item product-meta__share-button-item--mail link tap-area" href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">
-              {%- render 'icon' with 'share', width: 13, height: 13 | strip_newlines -%}
+              {%- render 'icon' with 'share', width: 13, height: 13 -%}
             </a>
           </div>
         </div>
@@ -462,7 +462,7 @@
         <p class="drawer__title heading h6">{{ help_page.title }}</p>
 
         <button type="button" class="drawer__close-button tap-area" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
-          {%- render 'icon' with 'close' | strip_newlines -%}
+          {%- render 'icon' with 'close' -%}
         </button>
       </header>
 
@@ -481,7 +481,7 @@
         <p class="popover__title heading h6">{{ help_page.title }}</p>
 
         <button type="button" class="popover__close-button tap-area tap-area--large" data-action="close" title="{{ 'general.accessibility.close' | t | escape }}">
-          {%- render 'icon' with 'close' | strip_newlines -%}
+          {%- render 'icon' with 'close' -%}
         </button>
       </header>
 
@@ -520,4 +520,59 @@
         });
     });
   
-</script>
+</script>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'rebatesearch', product: product | strip_newlines -%}"
+  to: "{%- render 'rebatesearch', product: product -%}"
+  position: 16788..16835
+- from: "{%- render 'product-rating', product: product | strip_newlines -%}"
+  to: "{%- render 'product-rating', product: product -%}"
+  position: 18417..18466
+- from: "{%- render 'product-rating', product: product | strip_newlines -%}"
+  to: "{%- render 'product-rating', product: product -%}"
+  position: 18653..18702
+- from: "{%- render 'product-form', product: product, update_url: update_url | strip_newlines
+    -%}"
+  to: "{%- render 'product-form', product: product, update_url: update_url -%}"
+  position: 20702..20773
+- from: "{%- render 'icon' with 'close' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'close' -%}"
+  position: 22300..22334
+- from: "{%- render 'icon' with 'facebook-share-mobile' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'facebook-share-mobile' -%}"
+  position: 22681..22731
+- from: "{%- render 'icon' with 'pinterest-share-mobile' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'pinterest-share-mobile' -%}"
+  position: 23133..23184
+- from: "{%- render 'icon' with 'twitter-share-mobile' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'twitter-share-mobile' -%}"
+  position: 23521..23570
+- from: "{%- render 'icon' with 'email-share-mobile' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'email-share-mobile' -%}"
+  position: 23827..23874
+- from: "{%- render 'icon' with 'facebook', width: 8, height: 14 | strip_newlines
+    -%}"
+  to: "{%- render 'icon' with 'facebook', width: 8, height: 14 -%}"
+  position: 24324..24383
+- from: "{%- render 'icon' with 'pinterest', width: 10, height: 14 | strip_newlines
+    -%}"
+  to: "{%- render 'icon' with 'pinterest', width: 10, height: 14 -%}"
+  position: 24794..24855
+- from: "{%- render 'icon' with 'twitter', width: 17, height: 14 | strip_newlines
+    -%}"
+  to: "{%- render 'icon' with 'twitter', width: 17, height: 14 -%}"
+  position: 25202..25261
+- from: "{%- render 'icon' with 'share', width: 13, height: 13 | strip_newlines -%}"
+  to: "{%- render 'icon' with 'share', width: 13, height: 13 -%}"
+  position: 25528..25585
+- from: "{%- render 'icon' with 'close' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'close' -%}"
+  position: 26693..26727
+- from: "{%- render 'icon' with 'close' | strip_newlines -%}"
+  to: "{%- render 'icon' with 'close' -%}"
+  position: 27434..27468
+{%- endcomment -%}
